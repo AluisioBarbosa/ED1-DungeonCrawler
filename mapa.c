@@ -27,26 +27,32 @@ Mapa* criaMapa(){
     }
     preSet = 1;
     dungeon->Inimigos = criaListaInimigo();
+    dungeon->traps = criaListaTrap();
+    dungeon->itens = criaListaItens();
+    dungeon->player = criarPlayer();
 
     switch(preSet){
         case 1:{
             char mapaTemp[15][15] = {           {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'},
-                                                {'#','.','.','.','.','I','.','.','.','.','.','.','.','.','#'},
-                                                {'#','.','.','I','.','I','.','.','.','.','.','.','.','.','#'},
-                                                {'#','.','.','I','.','I','.','.','.','.','.','.','.','.','#'},
-                                                {'#','-','-','I','.','I','.','.','.','.','.','.','.','.','#'},
-                                                {'#','.','.','.','.','I','.','.','.','.','.','.','.','.','#'},
-                                                {'#','.','.','.','.','I','.','.','.','.','.','.','.','.','#'},
-                                                {'#','.','.','-','-','I','.','.','.','.','.','.','.','.','#'},
-                                                {'#','.','.','.','.','I','.','.','.','.','.','.','.','.','#'},
-                                                {'#','.','.','.','.','I','.','.','.','.','.','.','.','.','#'},
-                                                {'#','.','.','.','.','.','.','.','.','.','.','.','.','.','#'},
-                                                {'#','.','.','.','.','.','.','.','.','.','.','.','.','.','#'},
-                                                {'#','.','.','.','.','.','.','.','.','.','.','.','.','.','#'},
-                                                {'#','.','.','.','.','.','.','.','.','.','.','.','.','.','#'},
+                                                {'#',' ',' ',' ',' ','I',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ','I',' ','I',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ','I',' ','I',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#','-','-','I',' ','I',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ',' ',' ','I',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ',' ',' ','I',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ','-','-','I',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ',' ',' ','I',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ',' ',' ','I',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
                                                 {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'}};
             memcpy(dungeon->mapa, mapaTemp, sizeof(mapaTemp));
+            setarItens(dungeon);
             setarInimigos(dungeon);
+            setarTraps(dungeon);
+            dungeon->mapa[getPlayerX(dungeon->player)][getPlayerY(dungeon->player)] = getPlayerRepresentacao(dungeon->player);
             break;
         }
         case 2:
@@ -84,10 +90,50 @@ void setarInimigos(Mapa* dungeon){
         while(setado == 0){
             int j = gerarNumeroAleatorio(0, 14);
             int k = gerarNumeroAleatorio(0, 14);
-            if(dungeon->mapa[j][k] == '.'){
+            if(dungeon->mapa[j][k] == ' '){
                 Inimigo* inimigo = criarInimigo();
-                dungeon->mapa[j][k] = getRepresentacaoMapa(inimigo);
+                setEnemyX(inimigo, j);
+                setEnemyY(inimigo, k);
+                dungeon->mapa[j][k] = getInimigoRepresentacao(inimigo);
                 inserirInimigo(dungeon->Inimigos, inimigo);
+                setado = 1;
+            }
+        }
+    }
+}
+
+void setarTraps(Mapa* dungeon){
+    int quantidade = gerarNumeroAleatorio(5,7);
+    for(int i = 0; i < quantidade; i++){
+        int setado = 0;
+        while(setado == 0){
+            int j = gerarNumeroAleatorio(0,14);
+            int k = gerarNumeroAleatorio(0,14);
+            if(dungeon->mapa[j][k] == ' '){
+                Trap* armadilha = criaTrap();
+                dungeon->mapa[j][k] = getTrapRepresentacao(armadilha);
+                setTrapX(armadilha, j);
+                setTrapY(armadilha, k);
+                inserirTrap(dungeon->traps, armadilha);
+                setado = 1;
+            }
+        }
+    }
+}
+
+void setarItens(Mapa* dungeon){
+    int quantidade = gerarNumeroAleatorio(3,5);
+    for(int i = 0; i < quantidade; i++){
+        int setado = 0;
+        while(setado == 0){
+            int j = gerarNumeroAleatorio(0, 14);
+            int k = gerarNumeroAleatorio(0, 14);
+            if(dungeon->mapa[j][k] == ' '){
+                Item* item = criaItem();
+                dungeon->mapa[j][k] = getItemRepresentacao(item);
+                setItemX(item, j);
+                setItemY(item, k);
+                inserirItem(dungeon->itens, item);
                 setado = 1;
             }
         }

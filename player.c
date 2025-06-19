@@ -1,7 +1,6 @@
 #include "player.h"
 #include "inventario.h"
 #include "matematica.h"
-#include "lista.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -18,27 +17,6 @@ struct player{
     int posicaoY;
 };
 
-int getPlayerHP(Player* player){
-    return player->HP;
-}
-
-void healPlayer(Player* player, int cura){
-    player->HP += cura;
-}
-
-void setPlayerHpDamage(Player* player, int damage){
-    player->HP -= calculaDano(damage, player->armor); // aqui faz o HP do player menos o dano do inimigo pós mitigação da armadura
-
-    if(player->HP <= 0){
-        player->HP = 0; // Só pra evitar eventuais baguncinhas que HP negativo pode causar
-        player->isDead = true;
-    }
-
-}
-
-int getPlayerWeaponDamage(Player* player){
-    return player->weaponDamage;
-}
 
 Player* criarPlayer(){
     Player *player = (Player*)malloc(sizeof(Player));
@@ -81,6 +59,8 @@ Player* criarPlayer(){
     player->inventario = criarInventario();
     player->isDead = false;
     player->representacaoMapa = 'P';
+    player->posicaoX = 1;
+    player->posicaoY = 1;
     
     return player;
 }
@@ -97,10 +77,50 @@ void destruirPlayer(Player* player){ // essa função só sera utilizada para a 
     free(player);
 }
 
+void healPlayer(Player* player, int cura){
+    player->HP += cura;
+    if(player->HP > 150){
+        player->HP = 150;
+    }
+}
+
 bool isPlayerDead(Player* player){
     return player->isDead;
 }
 
+//------------------------------------------- Gets e Setters ---------------------------------------------------------//
+void setPlayerX(Player* player, int posicao){
+    player->posicaoX = posicao;
+}
+void setPlayerY(Player* player, int posicao){
+    player->posicaoY = posicao;
+}
+void setPlayerHpDamage(Player* player, int damage){
+    player->HP -= calculaDano(damage, player->armor); // aqui faz o HP do player menos o dano do inimigo pós mitigação da armadura
+
+    if(player->HP <= 0){
+        player->HP = 0; // Só pra evitar eventuais baguncinhas que HP negativo pode causar
+        player->isDead = true;
+    }
+}
+
+int getPlayerWeaponDamage(Player* player){
+    return player->weaponDamage;
+}
+int getPlayerX(Player* player){
+    return player->posicaoX;
+}
+int getPlayerY(Player* player){
+    return player->posicaoY;
+}
+char getPlayerRepresentacao(Player* player){
+    return player->representacaoMapa;
+}
+int getPlayerHP(Player* player){
+    return player->HP;
+}
+
+//------------------------------------------- Funções de debug ---------------------------------------------------------//
 
 void printPlayer(Player* player){
     printf("ID do player: %d\n", player->playerID);
@@ -108,3 +128,5 @@ void printPlayer(Player* player){
     printf("Dano do player: %d\n", player->weaponDamage);
     printf("Armadura do player: %d\n\n", player->armor);
 }
+
+

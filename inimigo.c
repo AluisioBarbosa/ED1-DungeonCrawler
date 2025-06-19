@@ -30,23 +30,6 @@ struct listaInimigo{
     int tamanho;
 };
 
-
-int getEnemyHP(Inimigo* inimigo){
-    return inimigo->HP;
-}
-
-void setEnemyHpDamage(Inimigo* inimigo, int damage){
-    inimigo->HP -= calculaDano(damage, inimigo->armor);
-    if(inimigo->HP <= 0){
-        inimigo->HP = 0;
-        inimigo->isDead = true;
-    }
-}
-
-int getEnemyWeaponDamage(Inimigo* inimigo){
-    return inimigo->weaponDamage;
-}
-
 Inimigo* criarInimigo(){
     int preSet = gerarNumeroAleatorio(1,3);
     Inimigo* inimigo = (Inimigo*)malloc(sizeof(Inimigo));
@@ -99,7 +82,41 @@ void destruirInimigo(Inimigo* inimigo){
 bool isEnemyDead(Inimigo* inimigo){
     return inimigo->isDead;
 }
+// ----------------------------------------------- Gets e Setters -----------------------------------------------------------//
 
+
+void setEnemyHpDamage(Inimigo* inimigo, int damage){
+    inimigo->HP -= calculaDano(damage, inimigo->armor);
+    if(inimigo->HP <= 0){
+        inimigo->HP = 0;
+        inimigo->isDead = true;
+    }
+}
+
+void setEnemyX(Inimigo* inimigo, int posicao){
+    inimigo->posicaoX = posicao;
+}
+void setEnemyY(Inimigo* inimigo, int posicao){
+    inimigo->posicaoY = posicao;
+}
+int getEnemyX(Inimigo* inimigo){
+    return inimigo->posicaoX;
+}
+int getEnemyY(Inimigo* inimigo){
+    return inimigo->posicaoY;
+}
+int getEnemyHP(Inimigo* inimigo){
+    return inimigo->HP;
+}
+int getEnemyWeaponDamage(Inimigo* inimigo){
+    return inimigo->weaponDamage;
+}
+char getInimigoRepresentacao(Inimigo* inimigo){
+    return inimigo->representacaoMapa;
+}
+
+
+// ----------------------------------------------- Funções de lista -----------------------------------------------------------//
 
 ListaInimigo* criaListaInimigo(){
     ListaInimigo* l = (ListaInimigo*)malloc(sizeof(ListaInimigo));
@@ -129,8 +146,19 @@ void inserirInimigo(ListaInimigo* listaInimigo, Inimigo* inimigo){
     listaInimigo->tamanho++;
 }
 
-char getRepresentacaoMapa(Inimigo* inimigo){
-    return inimigo->representacaoMapa;
+void destruirListaInimigo(ListaInimigo* lista){
+    if(lista == NULL){
+        return;
+    }
+
+    CelulaInimigo* atual = lista->inicio;
+    while(atual != NULL){
+        CelulaInimigo* proximo = atual->prox;
+        destruirInimigo(atual->inimigo);
+        free(atual);
+        atual = proximo;
+    }
+    free(lista);
 }
 
 
@@ -138,6 +166,7 @@ char getRepresentacaoMapa(Inimigo* inimigo){
 
 
 
+// ----------------------------------------------- Funções para debugar -----------------------------------------------------------//
 
 void printInimigo(Inimigo* inimigo){
     printf("ID do inimigo: %d\n", inimigo->inimigoID);

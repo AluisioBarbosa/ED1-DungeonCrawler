@@ -3,19 +3,27 @@
 typedef struct inimigo Inimigo;
 typedef struct listaInimigo ListaInimigo; 
 
-int         getEnemyHP                  (Inimigo*);        //Função que pega o HP atual do inimigo
-void        setEnemyHpDamage            (Inimigo*, int);   //Função para tomar dano no HP
-int         getEnemyWeaponDamage        (Inimigo*);        //Função para pegar o dano da arma
-Inimigo*    criarInimigo                ();                //Função que cria o inimigo com base em pre-sets (HP, dano, armor, etc)
-void        destruirInimigo             (Inimigo*);        //Função para destruir o inimigo quando ele morrer
-bool        isEnemyDead                 (Inimigo*);        //Função que checa se o inimigo esta morto
-char        getRepresentacaoMapa        (Inimigo*);
 
+Inimigo*            criarInimigo                    ();                //Função que cria o inimigo com base em pre-sets (HP, dano, armor, etc)
+void                destruirInimigo                 (Inimigo*);        //Função para destruir o inimigo quando ele morrer
+bool                isEnemyDead                     (Inimigo*);        //Função que checa se o inimigo esta morto
 
-ListaInimigo* criaListaInimigo();
-void inserirInimigo(ListaInimigo*, Inimigo*);
+// ------------------------------------- Gets e setters ---------------------------------------------------------------//
 
+void                setEnemyHpDamage                (Inimigo*, int);   //Função para tomar dano no HP
+void                setEnemyX                       (Inimigo*, int);
+void                setEnemyY                       (Inimigo*, int);
+int                 getEnemyX                       (Inimigo*);
+int                 getEnemyY                       (Inimigo*);
+char                getInimigoRepresentacao         (Inimigo*);
+int                 getEnemyWeaponDamage            (Inimigo*);        //Função para pegar o dano da arma
+int                 getEnemyHP                      (Inimigo*);        //Função que pega o HP atual do inimigo
 
-// Funções para debugar
+// ------------------------------------- Funções de lista ---------------------------------------------------------------//
+ListaInimigo*       criaListaInimigo                ();
+void                inserirInimigo                  (ListaInimigo*, Inimigo*);
+void                destruirListaInimigo            (ListaInimigo*);
 
-void        printInimigo        (Inimigo*);         //Função para printar os atributos do inimigo
+// ------------------------------------- Funções para debugar ---------------------------------------------------------------//
+
+void                printInimigo                    (Inimigo*);         //Função para printar os atributos do inimigo
