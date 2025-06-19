@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "stdbool.h": "c",
+        "inventario.h": "c",
+        "matematica.h": "c",
+        "lista.h": "c",
+        "string.h": "c",
+        "stdlib.h": "c"
+    }
+}
