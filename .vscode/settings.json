@@ -6,6 +6,7 @@
         "matematica.h": "c",
         "lista.h": "c",
         "string.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "cores.h": "c"
     }
 }

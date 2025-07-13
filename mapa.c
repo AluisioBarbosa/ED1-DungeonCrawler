@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "ansi.h"
 
 
 struct mapa{
@@ -52,7 +53,7 @@ Mapa* criaMapa(){
             setarItens(dungeon);
             setarInimigos(dungeon);
             setarTraps(dungeon);
-            dungeon->mapa[getPlayerX(dungeon->player)][getPlayerY(dungeon->player)] = getPlayerRepresentacao(dungeon->player);
+            dungeon->mapa[getPlayerY(dungeon->player)][getPlayerX(dungeon->player)] = getPlayerRepresentacao(dungeon->player);
             break;
         }
         case 2:
@@ -138,4 +139,26 @@ void setarItens(Mapa* dungeon){
             }
         }
     }
+}
+
+Player* getPlayer(Mapa* dungeon){
+    return dungeon->player;
+}
+
+void atualizarMapa(Mapa* dungeon, int xAnt, int xPos, int yAnt, int yPos){
+    Player* p = dungeon->player;
+
+    // Atualiza matriz
+    dungeon->mapa[yAnt][xAnt] = ' ';
+    dungeon->mapa[yPos][xPos] = getPlayerRepresentacao(p);
+
+    // Apaga posição antiga no terminal
+    moveCursorPara(yAnt, xAnt);
+    printf("  "); // dois espaços
+
+    // Imprime nova posição
+    moveCursorPara(yPos, xPos);
+    printf("%c ", getPlayerRepresentacao(p));
+
+    fflush(stdout);
 }

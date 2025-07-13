@@ -4,26 +4,33 @@
 #include "player.h"
 #include <windows.h>
 #include "mapa.h"
+#include "log.h"
+#include "game.h"
+#include <stdlib.h>
 
 int main(){
-    system("chcp 65001 > nul"); // Forçar ter os caracteres de UTF-8
     instanciarSemente();
+    initLog();
+    int decisao = 1;
 
-    // Inimigo* i1;
-    // i1 = criarInimigo();
-    // printInimigo(i1);
+    Jogo* j = NULL;
 
-    // Player* p1;
-    // p1 = criarPlayer();
-    // printPlayer(p1);
-
-    Mapa* dungeon = criaMapa();
-    printDungeon(dungeon);
-
-
-
+    while(decisao == 1){
+        j = criarJogo();
+        
+        while(getEndGame(j) != true){
+            update(j);
+            Sleep(200);
+        }
 
 
+        printf("Quer jogar de novo? digite 1 para sim e 2 para nao\n");
+        scanf("%d", &decisao);
+    }
 
+
+
+
+    closeLog();
     return 0;
 }
