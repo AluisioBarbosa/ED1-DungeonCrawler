@@ -8,3 +8,5 @@ void logError(const char*);
 void initLog();
 void logToFile(const char*);
 void closeLog();
+
+void logMovimento(int, int, int, int);

@@ -13,10 +13,9 @@ int main(){
     initLog();
     int decisao = 1;
 
-    Jogo* j = NULL;
 
     while(decisao == 1){
-        j = criarJogo();
+        Jogo* j = criarJogo();
         
         while(getEndGame(j) != true){
             update(j);
@@ -24,8 +23,14 @@ int main(){
         }
 
 
+        while(getchar() != '\n');
         printf("Quer jogar de novo? digite 1 para sim e 2 para nao\n");
         scanf("%d", &decisao);
+
+        while(decisao != 1 && decisao != 2){
+            printf("Escolha nao encontrada, tente novamente: \n");
+            scanf("%d", &decisao);
+        }
     }
 
 

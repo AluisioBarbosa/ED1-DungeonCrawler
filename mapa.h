@@ -8,4 +8,5 @@ void            setarInimigos       (Mapa*);
 void            setarTraps          (Mapa*);
 void            setarItens          (Mapa*);
 Player*         getPlayer           (Mapa*);
+char            getRepresentacaoPosicaoMapa (Mapa*, int, int);
 void atualizarMapa(Mapa* , int, int, int, int);

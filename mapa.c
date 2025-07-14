@@ -47,7 +47,7 @@ Mapa* criaMapa(){
                                                 {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
                                                 {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
                                                 {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-                                                {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
+                                                {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','$'},
                                                 {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'}};
             memcpy(dungeon->mapa, mapaTemp, sizeof(mapaTemp));
             setarItens(dungeon);
@@ -76,6 +76,7 @@ Mapa* criaMapa(){
 
 
 void printDungeon(Mapa* dungeon){
+    system("cls");
     for(int i = 0; i < 15; i++){
         for(int j = 0; j < 15; j++){
             printf("%c ", dungeon->mapa[i][j]);
@@ -148,17 +149,22 @@ Player* getPlayer(Mapa* dungeon){
 void atualizarMapa(Mapa* dungeon, int xAnt, int xPos, int yAnt, int yPos){
     Player* p = dungeon->player;
 
-    // Atualiza matriz
     dungeon->mapa[yAnt][xAnt] = ' ';
     dungeon->mapa[yPos][xPos] = getPlayerRepresentacao(p);
 
-    // Apaga posição antiga no terminal
-    moveCursorPara(yAnt, xAnt);
-    printf("  "); // dois espaços
 
-    // Imprime nova posição
-    moveCursorPara(yPos, xPos);
-    printf("%c ", getPlayerRepresentacao(p));
 
-    fflush(stdout);
+    printDungeon(dungeon);
+}
+
+char getRepresentacaoPosicaoMapa(Mapa* dungeon, int altura, int largura){
+    return dungeon->mapa[altura][largura];
+}
+
+void destruirMapa(Mapa* dungeon){
+    destruirPlayer(dungeon->player);
+    destruirListaTrap(dungeon->traps);
+    destruirListaInimigo(dungeon->Inimigos);
+    destruirListaItem(dungeon->itens);
+    free(dungeon);
 }

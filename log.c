@@ -69,3 +69,9 @@ void closeLog() {
         logFile = NULL;
     }
 }
+
+void logMovimento(int xAnt, int yAnt, int xPos, int yPos){
+    char buffer[256];
+    snprintf(buffer, sizeof(buffer), "[INFO] O jogador se mexeu da posicao [%d][%d] para a posicao [%d][%d]", yAnt, xAnt, yPos, xPos);
+    logToFile(buffer);
+}
