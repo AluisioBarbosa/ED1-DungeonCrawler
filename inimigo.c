@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include "log.h"
 
 struct inimigo{
     int inimigoID;
@@ -34,7 +35,7 @@ Inimigo* criarInimigo(){
     int preSet = gerarNumeroAleatorio(1,3);
     Inimigo* inimigo = (Inimigo*)malloc(sizeof(Inimigo));
     if(inimigo == NULL){
-        printf("Falha na alocação de memoria na criação do inimigo\n");
+        logError("na alocação de memoria na criação do inimigo");
         exit(1);
     }
 
@@ -120,6 +121,10 @@ char getInimigoRepresentacao(Inimigo* inimigo){
 
 ListaInimigo* criaListaInimigo(){
     ListaInimigo* l = (ListaInimigo*)malloc(sizeof(ListaInimigo));
+    if(l == NULL){
+        logError("na alocação de memoria na criação do inimigo");
+        exit(1);
+    }
     l->inicio = NULL;
     l->fim = NULL;
     l->tamanho = 0;

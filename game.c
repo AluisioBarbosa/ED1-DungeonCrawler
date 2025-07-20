@@ -7,6 +7,14 @@
 #include "log.h"
 #include "player.h"
 
+typedef enum{
+    WORLD_MAP = 1,
+    COMBAT = 2,
+    INVENTORY = 3
+}States;
+
+int GAME_STATE;
+
 struct jogo{
     Mapa* dungeon;
     bool fimDeJogo;
@@ -20,21 +28,26 @@ Jogo* criarJogo(){
     }
     jogo->fimDeJogo = false;
     jogo->dungeon = criaMapa();
+    GAME_STATE = WORLD_MAP; // tem que setar o game state para o mapa da dungeon no inicio
     printDungeon(jogo->dungeon);
     return jogo;
 }
 
-
-
 void update(Jogo* jogo){
     Player* p1 = getPlayer(jogo->dungeon);
 
-    if(getPlayerX(getPlayer(jogo->dungeon)) == 14 && getPlayerY(getPlayer(jogo->dungeon)) == 13){
+    if(getPlayerX(getPlayer(jogo->dungeon)) == 14 && getPlayerY(getPlayer(jogo->dungeon)) == 13){ // termina o jogo se chegar na saida
         system("cls");
         printf("Voce terminou o jogo!\n");
         jogo->fimDeJogo = true;
     }
-    else{
+    else if(getPlayerHP(getPlayer(jogo->dungeon)) <= 0){ // termina o jogo se o HP for <= 0
+        system("cls");
+        printf("GAME OVER\n");
+        printf("Voce morreu!\n");
+        jogo->fimDeJogo = true;
+    }
+    else if(GAME_STATE == WORLD_MAP){
         bool flagMovimento = false;
 
         int xAnterior = getPlayerX(p1);
@@ -96,6 +109,12 @@ void update(Jogo* jogo){
             flagMovimento = false;
         }
     }
+    else if(GAME_STATE == COMBAT){
+
+    }
+    else if(GAME_STATE == INVENTORY){
+        
+    }
 }
 
 
@@ -106,4 +125,14 @@ bool getEndGame(Jogo* jogo){
 void destruirJogo(Jogo* jogo){
     destruirMapa(jogo->dungeon);
     free(jogo);
+}
+
+
+void changeDebugState(Jogo* jogo){
+    if(getDebugState(jogo->dungeon) == false){
+        setDebugState(jogo->dungeon, true);
+    }
+    else{
+        setDebugState(jogo->dungeon, false);
+    }
 }

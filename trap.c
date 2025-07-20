@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include "log.h"
 
 struct trap{
     char representacao;
@@ -27,6 +28,10 @@ struct listaTrap{
 
 Trap* criaTrap(){
     Trap* armadilha = (Trap*)malloc(sizeof(Trap));
+    if(armadilha == NULL){
+        logError("na alocação de memoria para criar uma armadilha");
+        exit(1);
+    }
     armadilha->dano = 15;
     armadilha->representacao = 'T';
     armadilha->isActivated = false;
@@ -101,7 +106,7 @@ void destruirListaTrap(ListaTrap* lista){
 void inserirTrap(ListaTrap* lista, Trap* armadilha){
     CelulaTrap *nova = (CelulaTrap*)malloc(sizeof(CelulaTrap));
     if(nova == NULL){
-        printf("Erro na alocação de memoria para inserir trap na lista\n");
+        logError("na alocação de memoria para inserir trap na lista");
         exit(1);
     }
 

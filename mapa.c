@@ -16,6 +16,7 @@ struct mapa{
     ListaInimigo* Inimigos;
     ListaItem* itens;
     Player* player;
+    bool debug;
 };
 
 
@@ -31,6 +32,7 @@ Mapa* criaMapa(){
     dungeon->traps = criaListaTrap();
     dungeon->itens = criaListaItens();
     dungeon->player = criarPlayer();
+    dungeon->debug = false;
 
     switch(preSet){
         case 1:{
@@ -77,11 +79,13 @@ Mapa* criaMapa(){
 
 void printDungeon(Mapa* dungeon){
     system("cls");
-    for(int i = 0; i < 15; i++){
-        for(int j = 0; j < 15; j++){
-            printf("%c ", dungeon->mapa[i][j]);
+    if(dungeon->debug == false){
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j < 15; j++){
+                printf("%c ", dungeon->mapa[i][j]);
+            }
+            printf("\n");
         }
-        printf("\n");
     }
 }
 
@@ -96,7 +100,7 @@ void setarInimigos(Mapa* dungeon){
                 Inimigo* inimigo = criarInimigo();
                 setEnemyX(inimigo, j);
                 setEnemyY(inimigo, k);
-                dungeon->mapa[j][k] = getInimigoRepresentacao(inimigo);
+                //dungeon->mapa[j][k] = getInimigoRepresentacao(inimigo);
                 inserirInimigo(dungeon->Inimigos, inimigo);
                 setado = 1;
             }
@@ -113,7 +117,7 @@ void setarTraps(Mapa* dungeon){
             int k = gerarNumeroAleatorio(0,14);
             if(dungeon->mapa[j][k] == ' '){
                 Trap* armadilha = criaTrap();
-                dungeon->mapa[j][k] = getTrapRepresentacao(armadilha);
+                //dungeon->mapa[j][k] = getTrapRepresentacao(armadilha);
                 setTrapX(armadilha, j);
                 setTrapY(armadilha, k);
                 inserirTrap(dungeon->traps, armadilha);
@@ -132,7 +136,7 @@ void setarItens(Mapa* dungeon){
             int k = gerarNumeroAleatorio(0, 14);
             if(dungeon->mapa[j][k] == ' '){
                 Item* item = criaItem();
-                dungeon->mapa[j][k] = getItemRepresentacao(item);
+                //dungeon->mapa[j][k] = getItemRepresentacao(item);
                 setItemX(item, j);
                 setItemY(item, k);
                 inserirItem(dungeon->itens, item);
@@ -167,4 +171,12 @@ void destruirMapa(Mapa* dungeon){
     destruirListaInimigo(dungeon->Inimigos);
     destruirListaItem(dungeon->itens);
     free(dungeon);
+}
+
+bool getDebugState(Mapa* dungeon){
+    return dungeon->debug;
+}
+
+void setDebugState(Mapa* dungeon, bool state){
+    dungeon->debug = state;
 }

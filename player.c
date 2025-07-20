@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "log.h"
 
 struct player{
     char representacaoMapa;
@@ -21,7 +22,7 @@ struct player{
 Player* criarPlayer(){
     Player *player = (Player*)malloc(sizeof(Player));
     if(player == NULL){
-        printf("Erro na alocação de memoria para o jogador");
+        logError("na alocação de memoria do personagem");
         exit(1);
     }
 

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <windows.h>
 
 struct item{
     char representacao;
@@ -12,6 +13,7 @@ struct item{
     int posicaoX;
     int posicaoY;
     char nome[64];
+    char descricao[1024];
     void (*usar)(struct item* self, void* afetado); // Isso aqui é um ponteiro para uma função que vai usar o item
                                                     // Tem como parâmetros o item, e um ponteiro pra quem vai ser afetado (inimigo ou player) 
 };
@@ -41,16 +43,19 @@ Item* criaItem(){
             strcpy(item->nome, "Poção de vida");
             item->representacao = 'O';
             item->usar = usarPocao;
+            strcpy(item->descricao, "Poção de vida: cura 50 de HP");
             break;
         case 2:
             strcpy(item->nome, "Bomba");
             item->representacao = 'O';
             item->usar = usarBomba;
+            strcpy(item->descricao, "Bomba: inflinge 40 de dano ao inimigo");
             break;
         case 3:
             strcpy(item->nome, "Bomba de fumaca"); // esse item aqui a gente usa pra escapar dos bixos
             item->representacao = 'O';
-            item->usar = usarPocao; // placeholder
+            item->usar = usarBombaFumaca; // placeholder
+            strcpy(item->descricao, "Bomba de fumaça: use este item para escapar do combate");
             break;      
     }
     item->itemID = preSet;
@@ -94,7 +99,11 @@ void usarBomba(Item* bomba, void* afetado){
 }
 
 void usarBombaFumaca(Item* bombaF, void* afetado){
-    // imeplentação da bomba de fumaça (farei depois);
+    Inimigo* inimigo = (Inimigo*)afetado;
+    setEnemyHpDamage(inimigo, getEnemyHP(inimigo));
+    system("cls");
+    printf("Voce escapou do combate!!\n");
+    Sleep(150);
 }
 
 //------------------------------------------- Funções de lista ---------------------------------------------------------//

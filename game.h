@@ -7,3 +7,4 @@ Jogo* criarJogo();
 void update(Jogo*);
 bool getEndGame(Jogo*);
 void destruirJogo(Jogo*);
+void changeDebugState(Jogo*);
