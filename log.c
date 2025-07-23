@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 static FILE* logFile = NULL;
 
@@ -48,7 +49,7 @@ void initLog() {
     strftime(filename, sizeof(filename), "log_%Y%m%d_%H%M%S.txt", t);
 
     logFile = fopen(filename, "a");
-    if (!logFile) {
+    if (logFile == NULL) {
         perror("Erro ao criar arquivo de log");
         exit(1);
     }
@@ -56,7 +57,7 @@ void initLog() {
 }
 
 void logToFile(const char* mensagem) {
-    if (!logFile) {
+    if (logFile == NULL) {
         initLog();
     }
     fprintf(logFile, "%s %s\n", horaAtualFormatada(), mensagem);
@@ -64,7 +65,7 @@ void logToFile(const char* mensagem) {
 }
 
 void closeLog() {
-    if (logFile) {
+    if (logFile != NULL) {
         fclose(logFile);
         logFile = NULL;
     }

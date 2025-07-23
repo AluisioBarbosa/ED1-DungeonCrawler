@@ -44,6 +44,3 @@
 #define ESTILO_INVERTIDO   "\033[7m"
 #define ESTILO_OCULTO      "\033[8m"
 #define ESTILO_RISCADO     "\033[9m"
-
-
-void moveCursorPara(int, int);

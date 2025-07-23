@@ -166,6 +166,121 @@ void destruirListaInimigo(ListaInimigo* lista){
     free(lista);
 }
 
+int getInimigoQuantidade(ListaInimigo* lista){
+    return lista->tamanho;
+}
+
+bool removerInimigo(ListaInimigo* lista, Inimigo* alvo){
+
+    if(lista == NULL || lista->inicio == NULL || alvo == NULL){
+        logError("Lista de inimigos não existe // iminigo nao existente");
+        return false;
+    }
+
+    CelulaInimigo* atual = lista->inicio;
+
+    while(atual != NULL){
+        if(atual->inimigo == alvo){
+            if(atual->ant != NULL){
+                atual->ant->prox = atual->prox;
+            } 
+            else{
+                lista->inicio = atual->prox;
+            }
+
+            if(atual->prox != NULL){
+                atual->prox->ant = atual->ant;
+            }
+            else{
+                lista->fim = atual->ant;
+            }
+
+            destruirInimigo(atual->inimigo);
+            free(atual);
+            lista->tamanho--;
+            return true;
+        }
+        atual = atual->prox;
+    }
+
+    return false;
+}
+
+
+Inimigo* buscarInimigoXY(ListaInimigo* lista, int x, int y){
+    if(lista == NULL){ 
+        return NULL;
+    }
+
+    CelulaInimigo* atual = lista->inicio;
+    while(atual != NULL){
+        if(atual->inimigo->posicaoX == x && atual->inimigo->posicaoY == y){
+            return atual->inimigo;
+        }
+        atual = atual->prox;
+    }
+    return NULL;
+}
+
+// Teoricamente falando, checar se existe algum inimigo na posição xy é atribuição do jogo
+// se sobrar tempo, colocar isso no game.c em vez de deixar no inimigo.c
+bool checarInimigoXY(ListaInimigo* lista, int x, int y){
+    if(lista == NULL){
+        return NULL;
+    }
+
+    CelulaInimigo* atual = lista->inicio;
+    while(atual != NULL){
+        if(atual->inimigo->posicaoX == x && atual->inimigo->posicaoY == y){
+            return true;
+        }
+        atual = atual->prox;
+    }
+    return NULL;
+}
+
+void atualizarInimigosNoMapa(ListaInimigo* lista, char mapa[15][15], bool debug){
+    if(debug == false || lista == NULL) {
+        return;
+    }
+
+    CelulaInimigo* atual = lista->inicio;
+
+    while(atual != NULL){
+        Inimigo* inimigo = atual->inimigo;
+
+        if(inimigo->isDead == false){
+            int x = inimigo->posicaoX;
+            int y = inimigo->posicaoY;
+
+            if(mapa[y][x] == ' '){
+                mapa[y][x] = inimigo->representacaoMapa;
+            }
+        }
+
+        atual = atual->prox;
+    }
+}
+void esconderInimigosDoMapa(ListaInimigo* lista, char mapa[15][15]){
+    if(lista == NULL) {
+        return;
+    }
+
+    CelulaInimigo* atual = lista->inicio;
+
+    while(atual != NULL){
+        Inimigo* inimigo = atual->inimigo;
+
+        if(inimigo->isDead == false){
+            int x = inimigo->posicaoX;
+            int y = inimigo->posicaoY;
+
+            mapa[y][x] = ' ';
+        }
+
+        atual = atual->prox;
+    }
+}
 
 
 

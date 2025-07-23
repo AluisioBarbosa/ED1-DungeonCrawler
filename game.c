@@ -6,6 +6,9 @@
 #include "game.h"
 #include "log.h"
 #include "player.h"
+#include "trap.h"
+#include "movimentacao.h"
+#include "inventario.h"
 
 typedef enum{
     WORLD_MAP = 1,
@@ -36,6 +39,36 @@ Jogo* criarJogo(){
 void update(Jogo* jogo){
     Player* p1 = getPlayer(jogo->dungeon);
 
+    if (GetAsyncKeyState('F') & 0x8000){
+        if(getDebugState(jogo->dungeon) == false){
+            setDebugState(jogo->dungeon, true);
+        }
+        else{
+            setDebugState(jogo->dungeon, false);
+        }
+        setarInimigosDebug(jogo->dungeon, getDebugState(jogo->dungeon));
+    }
+    if(checarExisteInimigoPosicaoMapa(jogo->dungeon) == true){
+        Inimigo* inimigo = buscarInimigoXY(getListaInimigos(jogo->dungeon), getPlayerX(p1), getPlayerY(p1));
+        //GAME_STATE = COMBAT;
+    }
+    else if(checarExisteTrapPosicaoMapa(jogo->dungeon) == true){
+        Trap* armadilha = buscarTrapXY(getListaTrap(jogo->dungeon), getPlayerX(p1), getPlayerY(p1));
+        setPlayerHpDamage(p1, getTrapDamage(armadilha));
+        removerTrap(getListaTrap(jogo->dungeon), armadilha);
+        armadilha = NULL;
+    }
+    else if(checarExisteItemPosicaoMapa(jogo->dungeon) == true){
+        Item* item = buscarItemXY(getListaItem(jogo->dungeon), getPlayerX(p1), getPlayerY(p1));
+        adicionarNoInventario(getInventario(p1), copiarItem(item));
+        char mensagem[64];
+        snprintf(mensagem, sizeof(mensagem), "Voce pegou um item: %s", getItemNome(item));
+        logInfo(mensagem);
+        removerItem(getListaItem(jogo->dungeon), item);
+        item = NULL;
+        Sleep(1000);
+    }
+
     if(getPlayerX(getPlayer(jogo->dungeon)) == 14 && getPlayerY(getPlayer(jogo->dungeon)) == 13){ // termina o jogo se chegar na saida
         system("cls");
         printf("Voce terminou o jogo!\n");
@@ -47,74 +80,18 @@ void update(Jogo* jogo){
         printf("Voce morreu!\n");
         jogo->fimDeJogo = true;
     }
+    
     else if(GAME_STATE == WORLD_MAP){
-        bool flagMovimento = false;
-
-        int xAnterior = getPlayerX(p1);
-        int yAnterior = getPlayerY(p1);
-        int xPosterior = xAnterior;
-        int yPosterior = yAnterior;
-
-        if (GetAsyncKeyState('W') & 0x8000){
-            if(getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior - 1, xPosterior) == '#' ||
-            getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior - 1, xPosterior) == 'I' ||
-            getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior - 1, xPosterior) == '-'){
-                logError("Posicao invalida, tente novamente!!!");
-                printDungeon(jogo->dungeon);
-            }
-            else{
-                yPosterior -= 1; // sobe - linha diminui
-                flagMovimento = true;
-            }
-        }
-        else if(GetAsyncKeyState('S') & 0x8000){
-            if(getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior + 1, xPosterior) == '#' ||
-            getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior + 1, xPosterior) == 'I' ||
-            getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior + 1, xPosterior) == '-'){
-                logError("Posicao invalida, tente novamente!!!");
-            }
-            else{
-                yPosterior += 1; // desce - linha aumenta
-                flagMovimento = true;
-            }
-        }
-        else if(GetAsyncKeyState('A') & 0x8000){
-            if(getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior, xPosterior - 1) == '#' ||
-            getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior, xPosterior - 1) == 'I' ||
-            getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior, xPosterior - 1) == '-'){
-                logError("Posicao invalida, tente novamente!!!");
-            }
-            else{
-                xPosterior -= 1; // esquerda - coluna diminui
-                flagMovimento = true;
-            }
-        }
-        else if(GetAsyncKeyState('D') & 0x8000){
-            if(getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior, xPosterior + 1) == '#' ||
-            getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior, xPosterior + 1) == 'I' ||
-            getRepresentacaoPosicaoMapa(jogo->dungeon, yPosterior, xPosterior + 1) == '-'){
-                logError("Posicao invalida, tente novamente!!!");
-            }
-            else{
-                xPosterior += 1; // direita - coluna aumenta
-                flagMovimento = true;
-            }
-        }
-
-        if(flagMovimento == true){
-            logMovimento(yAnterior, xAnterior, yPosterior, xPosterior);
-            setPlayerX(p1, xPosterior);
-            setPlayerY(p1, yPosterior);
-            atualizarMapa(jogo->dungeon, xAnterior, xPosterior, yAnterior, yPosterior);
-            flagMovimento = false;
-        }
+        movimentarJogador(jogo->dungeon);
     }
     else if(GAME_STATE == COMBAT){
-
+ 
     }
     else if(GAME_STATE == INVENTORY){
         
     }
+
+    
 }
 
 
@@ -136,3 +113,9 @@ void changeDebugState(Jogo* jogo){
         setDebugState(jogo->dungeon, false);
     }
 }
+
+Mapa* getGameDungeon(Jogo* jogo){
+    return jogo->dungeon;
+}
+
+

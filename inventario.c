@@ -25,3 +25,7 @@ void destruirInventario(Inventario* inventario){
 
     free(inventario);
 }
+
+void adicionarNoInventario(Inventario* inventario, Item* item){
+    inserirItem(inventario->itens, item);
+}

@@ -5,7 +5,7 @@
 #include "log.h"
 
 struct trap{
-    char representacao;
+    char representacaoMapa;
     int trapID;
     int dano;
     int posicaoX;
@@ -33,8 +33,9 @@ Trap* criaTrap(){
         exit(1);
     }
     armadilha->dano = 15;
-    armadilha->representacao = 'T';
+    armadilha->representacaoMapa = 'T';
     armadilha->isActivated = false;
+    logToFile("Armadilha criada com sucesso");
     return armadilha;
 }
 
@@ -70,7 +71,7 @@ bool getTrapState(Trap* armadilha){
 }
 
 char getTrapRepresentacao(Trap* armadilha){
-    return armadilha->representacao;
+    return armadilha->representacaoMapa;
 }
 
 int getTrapDamage(Trap* armadilha){
@@ -90,6 +91,7 @@ ListaTrap* criaListaTrap(){
 
 void destruirListaTrap(ListaTrap* lista){
     if(lista == NULL){
+        logWarn("Lista de traps não existe");
         return;
     }
 
@@ -125,4 +127,115 @@ void inserirTrap(ListaTrap* lista, Trap* armadilha){
         lista->inicio = nova;
     }
     lista->tamanho++;
+}
+bool removerTrap(ListaTrap* lista, Trap* alvo){
+
+    if(lista == NULL || lista->inicio == NULL || alvo == NULL){
+        logError("Lista de traps não existe // Trap nao existente");
+        return false;
+    }
+
+    CelulaTrap* atual = lista->inicio;
+
+    while(atual != NULL){
+        if(atual->trap == alvo){
+            if(atual->ant != NULL){
+                atual->ant->prox = atual->prox;
+            } 
+            else{
+                lista->inicio = atual->prox;
+            }
+
+            if(atual->prox != NULL){
+                atual->prox->ant = atual->ant;
+            }
+            else{
+                lista->fim = atual->ant;
+            }
+
+            destruirTrap(atual->trap);
+            free(atual);
+            lista->tamanho--;
+            return true;
+        }
+        atual = atual->prox;
+    }
+
+    return false;
+}
+
+
+Trap* buscarTrapXY(ListaTrap* lista, int x, int y){
+    if(lista == NULL){ 
+        return NULL;
+    }
+
+    CelulaTrap* atual = lista->inicio;
+    while(atual != NULL){
+        if(atual->trap->posicaoX == x && atual->trap->posicaoY == y){
+            return atual->trap;
+        }
+        atual = atual->prox;
+    }
+    return NULL;
+}
+
+void atualizarTrapsNoMapa(ListaTrap* lista, char mapa[15][15], bool debug){
+    if(debug == false || lista == NULL) {
+        return;
+    }
+
+    CelulaTrap* atual = lista->inicio;
+
+    while(atual != NULL){
+        Trap* trap = atual->trap;
+
+        if(trap->isActivated == false){
+            int x = trap->posicaoX;
+            int y = trap->posicaoY;
+
+            if(mapa[y][x] == ' '){
+                mapa[y][x] = trap->representacaoMapa;
+            }
+        }
+
+        atual = atual->prox;
+    }
+}
+void esconderTrapsDoMapa(ListaTrap* lista, char mapa[15][15]){
+    if(lista == NULL) {
+        return;
+    }
+
+    CelulaTrap* atual = lista->inicio;
+
+    while(atual != NULL){
+        Trap* trap = atual->trap;
+
+        if(trap->isActivated == false){
+            int x = trap->posicaoX;
+            int y = trap->posicaoY;
+
+            mapa[y][x] = ' ';
+        }
+
+        atual = atual->prox;
+    }
+}
+
+// Teoricamente falando, checar se existe alguma trap na posição xy é atribuição do jogo
+// se sobrar tempo, colocar isso no game.c em vez de deixar no inimigo.c
+bool checarTrapXY(ListaTrap* lista, int x, int y){
+    if(lista == NULL){
+        return NULL;
+    }
+
+    CelulaTrap* atual = lista->inicio;
+    while(atual != NULL){
+        if(atual->trap->posicaoX == x && atual->trap->posicaoY == y){
+            return true;
+        }
+        atual = atual->prox;
+    }
+    return NULL;
 }

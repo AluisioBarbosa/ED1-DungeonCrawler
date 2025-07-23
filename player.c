@@ -62,7 +62,6 @@ Player* criarPlayer(){
     player->representacaoMapa = 'P';
     player->posicaoX = 1;
     player->posicaoY = 1;
-    
     return player;
 }
 
@@ -76,6 +75,7 @@ void destruirPlayer(Player* player){ // essa função só sera utilizada para a 
     }
 
     free(player);
+    logToFile("Player destruido com sucesso");
 }
 
 void healPlayer(Player* player, int cura){
@@ -119,6 +119,10 @@ char getPlayerRepresentacao(Player* player){
 }
 int getPlayerHP(Player* player){
     return player->HP;
+}
+
+Inventario* getInventario(Player* player){
+    return player->inventario;
 }
 
 //------------------------------------------- Funções de debug ---------------------------------------------------------//

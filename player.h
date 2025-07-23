@@ -1,5 +1,5 @@
 #include <stdbool.h>
-
+#include "inventario.h"
 typedef struct player Player;
 
 void        healPlayer              (Player*, int);   //Função para healar o HP
@@ -17,6 +17,7 @@ int         getPlayerY              (Player*);
 char        getPlayerRepresentacao  (Player*);
 int         getPlayerWeaponDamage   (Player*);        //Função para pegar o dano da arma
 int         getPlayerHP             (Player*);        //Função que pega o HP atual do jogador
+Inventario* getInventario(Player*);
 
 //------------------------------------------- Funções para debugar ---------------------------------------------------------//
 

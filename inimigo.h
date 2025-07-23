@@ -23,6 +23,12 @@ int                 getEnemyHP                      (Inimigo*);        //Funçã
 ListaInimigo*       criaListaInimigo                ();
 void                inserirInimigo                  (ListaInimigo*, Inimigo*);
 void                destruirListaInimigo            (ListaInimigo*);
+int getInimigoQuantidade(ListaInimigo*);
+bool removerInimigo(ListaInimigo*, Inimigo*);
+Inimigo* buscarInimigoXY(ListaInimigo*, int, int);
+bool checarInimigoXY(ListaInimigo*, int, int);
+void atualizarInimigosNoMapa(ListaInimigo*, char[15][15], bool);
+void esconderInimigosDoMapa(ListaInimigo*, char [15][15]);
 
 // ------------------------------------- Funções para debugar ---------------------------------------------------------------//
 
