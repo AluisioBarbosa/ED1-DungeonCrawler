@@ -2,10 +2,11 @@
 #include "log.h"
 #include "mapa.h"
 #include "game.h"
+#include "pilha.h"
 #include <windows.h>
 #include <stdbool.h>
 
-void movimentarJogador(Mapa* dungeon) {
+void movimentarJogador(Mapa* dungeon, Pilha* movimentos) {
     Player* p1 = getPlayer(dungeon);
     bool flagMovimento = false;
 
@@ -24,6 +25,7 @@ void movimentarJogador(Mapa* dungeon) {
         else{
             yPosterior -= 1;
             flagMovimento = true;
+            push('S', movimentos); // já estou colocando o contrario na pilha para o ctrl z
         }
     }
     else if (GetAsyncKeyState('S') & 0x8000){
@@ -36,6 +38,7 @@ void movimentarJogador(Mapa* dungeon) {
         else{
             yPosterior += 1;
             flagMovimento = true;
+            push('W', movimentos); // já estou colocando o contrario na pilha para o ctrl z
         }
     }
     else if (GetAsyncKeyState('A') & 0x8000){
@@ -48,6 +51,7 @@ void movimentarJogador(Mapa* dungeon) {
         else{
             xPosterior -= 1;
             flagMovimento = true;
+            push('D', movimentos); // já estou colocando o contrario na pilha para o ctrl z
         }
     }
     else if (GetAsyncKeyState('D') & 0x8000){
@@ -60,8 +64,31 @@ void movimentarJogador(Mapa* dungeon) {
         else{
             xPosterior += 1;
             flagMovimento = true;
+            push('A', movimentos); // já estou colocando o contrario na pilha para o ctrl z
         }
     }
+    else if (GetAsyncKeyState('Z') & 0x8000){
+        if(isEmpty(movimentos)){
+            logWarn("Se esgotaram os movimentos para voltar com o Z");
+        }
+        else{
+            char ctrlZ = pop(movimentos);
+            if(ctrlZ == 'W'){
+                yPosterior -= 1;
+            }
+            else if(ctrlZ == 'S'){
+                yPosterior += 1;
+            }
+            else if(ctrlZ == 'A'){
+                xPosterior -= 1;
+            }
+            else if (ctrlZ == 'D'){
+                xPosterior += 1;
+            }
+            flagMovimento = true;
+        }
+    }
+
     if(flagMovimento == true){
         logMovimento(yAnterior, xAnterior, yPosterior, xPosterior);
         setPlayerX(p1, xPosterior);

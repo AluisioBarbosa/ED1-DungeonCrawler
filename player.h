@@ -18,6 +18,8 @@ char        getPlayerRepresentacao  (Player*);
 int         getPlayerWeaponDamage   (Player*);        //Função para pegar o dano da arma
 int         getPlayerHP             (Player*);        //Função que pega o HP atual do jogador
 Inventario* getInventario(Player*);
+char* getPlayerName(Player*);
+int getPlayerMaxHP(Player*);
 
 //------------------------------------------- Funções para debugar ---------------------------------------------------------//
 

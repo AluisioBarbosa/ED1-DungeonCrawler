@@ -4,11 +4,13 @@
 #include "player.h"
 #include <stdbool.h>
 #include "game.h"
+#include "combat.h"
 #include "log.h"
 #include "player.h"
 #include "trap.h"
 #include "movimentacao.h"
 #include "inventario.h"
+#include "pilha.h"
 
 typedef enum{
     WORLD_MAP = 1,
@@ -21,16 +23,18 @@ int GAME_STATE;
 struct jogo{
     Mapa* dungeon;
     bool fimDeJogo;
+    Pilha* movimentos;
 };
 
 Jogo* criarJogo(){
     Jogo* jogo = (Jogo*)malloc(sizeof(Jogo));
     if(jogo == NULL){
-        logError("NA HORA DE CRIAR O JOGO");
+        logError("ERRO NA HORA DE CRIAR O JOGO");
         exit(1);
     }
     jogo->fimDeJogo = false;
     jogo->dungeon = criaMapa();
+    jogo->movimentos = criaPilha();
     GAME_STATE = WORLD_MAP; // tem que setar o game state para o mapa da dungeon no inicio
     printDungeon(jogo->dungeon);
     return jogo;
@@ -50,7 +54,7 @@ void update(Jogo* jogo){
     }
     if(checarExisteInimigoPosicaoMapa(jogo->dungeon) == true){
         Inimigo* inimigo = buscarInimigoXY(getListaInimigos(jogo->dungeon), getPlayerX(p1), getPlayerY(p1));
-        //GAME_STATE = COMBAT;
+        GAME_STATE = COMBAT;
     }
     else if(checarExisteTrapPosicaoMapa(jogo->dungeon) == true){
         Trap* armadilha = buscarTrapXY(getListaTrap(jogo->dungeon), getPlayerX(p1), getPlayerY(p1));
@@ -71,21 +75,27 @@ void update(Jogo* jogo){
 
     if(getPlayerX(getPlayer(jogo->dungeon)) == 14 && getPlayerY(getPlayer(jogo->dungeon)) == 13){ // termina o jogo se chegar na saida
         system("cls");
-        printf("Voce terminou o jogo!\n");
+        logInfo("Voce terminou o jogo!!");
         jogo->fimDeJogo = true;
     }
-    else if(getPlayerHP(getPlayer(jogo->dungeon)) <= 0){ // termina o jogo se o HP for <= 0
+    else if(isPlayerDead(p1)){ // termina o jogo se o HP for <= 0
         system("cls");
-        printf("GAME OVER\n");
-        printf("Voce morreu!\n");
+        logInfo("Voce morreu.");
+        logInfo("GAME OVER!");
         jogo->fimDeJogo = true;
     }
     
     else if(GAME_STATE == WORLD_MAP){
-        movimentarJogador(jogo->dungeon);
+        movimentarJogador(jogo->dungeon, jogo->movimentos);
     }
     else if(GAME_STATE == COMBAT){
- 
+        Inimigo* inimigo = buscarInimigoXY(getListaInimigos(jogo->dungeon), getPlayerX(p1), getPlayerY(p1));
+        if(combate(inimigo, p1) == true){
+            removerInimigo(getListaInimigos(jogo->dungeon), inimigo);
+            inimigo = NULL;
+            GAME_STATE = WORLD_MAP;
+            printDungeon(jogo->dungeon);
+        }
     }
     else if(GAME_STATE == INVENTORY){
         

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "fila.h"
+#include "log.h"
 
 typedef struct cel{
     int valor;
@@ -17,6 +18,10 @@ struct fila
 
 Fila* criarFila(){
     Fila *f = (Fila*)malloc(sizeof(Fila));
+    if(f == NULL){
+        logError("Erro na hora de alocar memoria para a fila");
+        exit(1);
+    }
     f->inicio = NULL;
     f->fim = NULL;
     f->tamanho = 0;
@@ -40,6 +45,10 @@ void imprimirFila(Fila *f){
 
 void enfileirar(Fila *f, int valor){
     Celula *cel = (Celula*)malloc(sizeof(Celula));
+    if(cel == NULL){
+        logError("Erro na alocação de memoria para celula da fila");
+        exit(1);
+    }
     cel->valor = valor;
     cel->proximo = NULL;
 

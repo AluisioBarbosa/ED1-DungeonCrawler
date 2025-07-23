@@ -8,6 +8,7 @@
         "string.h": "c",
         "stdlib.h": "c",
         "cores.h": "c",
-        "mapa.h": "c"
+        "mapa.h": "c",
+        "windows.h": "c"
     }
 }

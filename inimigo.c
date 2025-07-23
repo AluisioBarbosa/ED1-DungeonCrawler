@@ -9,8 +9,9 @@
 struct inimigo{
     int inimigoID;
     char representacaoMapa;
-    char* nome;
+    char nome[32];
     int HP;
+    int maxHP;
     int weaponDamage;
     int armor;
     bool isDead;
@@ -35,14 +36,13 @@ Inimigo* criarInimigo(){
     int preSet = gerarNumeroAleatorio(1,3);
     Inimigo* inimigo = (Inimigo*)malloc(sizeof(Inimigo));
     if(inimigo == NULL){
-        logError("na alocação de memoria na criação do inimigo");
+        logError("Erro na alocação de memoria na criação do inimigo");
         exit(1);
     }
 
     switch(preSet){
         case 1:
             inimigo->representacaoMapa = 'Z';
-            inimigo->nome = (char*)malloc(6 * sizeof(char)); // aloca espaço pra 6 letras
             strcpy(inimigo->nome, "Zumbi");
             inimigo->HP = 70;
             inimigo->weaponDamage = 7;
@@ -50,7 +50,6 @@ Inimigo* criarInimigo(){
             break;
         case 2:
             inimigo->representacaoMapa = 'E';
-            inimigo->nome = (char*)malloc(10 * sizeof(char)); // aloca espaço pra 10 letras
             strcpy(inimigo->nome, "Esqueleto");
             inimigo->HP = 50;
             inimigo->weaponDamage = 10;
@@ -58,7 +57,6 @@ Inimigo* criarInimigo(){
             break;
         case 3:
             inimigo->representacaoMapa = 'H';
-            inimigo->nome = (char*)malloc(7 * sizeof(char)); // aloca espaço pra 7 letras
             strcpy(inimigo->nome, "Humano");
             inimigo->HP = 90;
             inimigo->weaponDamage = 5;
@@ -66,6 +64,7 @@ Inimigo* criarInimigo(){
             break;      
     }
     inimigo->inimigoID = preSet;
+    inimigo->maxHP = inimigo->HP;
     inimigo->isDead = false;
     return inimigo;
 }
@@ -116,13 +115,20 @@ char getInimigoRepresentacao(Inimigo* inimigo){
     return inimigo->representacaoMapa;
 }
 
+char* getEnemyName(Inimigo* inimigo){
+    return inimigo->nome;
+}
+
+int getEnemyMaxHP(Inimigo* inimigo){
+    return inimigo->maxHP;
+}
 
 // ----------------------------------------------- Funções de lista -----------------------------------------------------------//
 
 ListaInimigo* criaListaInimigo(){
     ListaInimigo* l = (ListaInimigo*)malloc(sizeof(ListaInimigo));
     if(l == NULL){
-        logError("na alocação de memoria na criação do inimigo");
+        logError("Erro na alocação de memoria na criação da lista de inimigos");
         exit(1);
     }
     l->inicio = NULL;
@@ -134,6 +140,10 @@ ListaInimigo* criaListaInimigo(){
 
 void inserirInimigo(ListaInimigo* listaInimigo, Inimigo* inimigo){
     CelulaInimigo *nova = malloc(sizeof(CelulaInimigo));
+    if(nova == NULL){
+        logError("Erro na alocação de memoria da celula da lista de inimigos");
+        exit(1);
+    }
     nova->inimigo = inimigo;
 
     if (listaInimigo->inicio == NULL){ // lista vazia
@@ -153,6 +163,7 @@ void inserirInimigo(ListaInimigo* listaInimigo, Inimigo* inimigo){
 
 void destruirListaInimigo(ListaInimigo* lista){
     if(lista == NULL){
+        logError("Lista não existe");
         return;
     }
 
@@ -209,6 +220,7 @@ bool removerInimigo(ListaInimigo* lista, Inimigo* alvo){
 
 Inimigo* buscarInimigoXY(ListaInimigo* lista, int x, int y){
     if(lista == NULL){ 
+        logError("Lista nao existe");
         return NULL;
     }
 
@@ -226,6 +238,7 @@ Inimigo* buscarInimigoXY(ListaInimigo* lista, int x, int y){
 // se sobrar tempo, colocar isso no game.c em vez de deixar no inimigo.c
 bool checarInimigoXY(ListaInimigo* lista, int x, int y){
     if(lista == NULL){
+        logError("Lista nao existe");
         return NULL;
     }
 
@@ -241,6 +254,7 @@ bool checarInimigoXY(ListaInimigo* lista, int x, int y){
 
 void atualizarInimigosNoMapa(ListaInimigo* lista, char mapa[15][15], bool debug){
     if(debug == false || lista == NULL) {
+        logError("Lista nao existe // debug falso nao atualiza");
         return;
     }
 
@@ -263,6 +277,7 @@ void atualizarInimigosNoMapa(ListaInimigo* lista, char mapa[15][15], bool debug)
 }
 void esconderInimigosDoMapa(ListaInimigo* lista, char mapa[15][15]){
     if(lista == NULL) {
+        logError("Lista nao existe");
         return;
     }
 

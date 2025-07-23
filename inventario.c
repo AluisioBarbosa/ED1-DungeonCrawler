@@ -1,6 +1,7 @@
 #include "inventario.h"
 #include "item.h"
 #include <stdio.h>
+#include "log.h"
 #include <stdlib.h>
 
 
@@ -11,6 +12,10 @@ struct inventario{
 
 Inventario* criarInventario(){
     Inventario* inventario = (Inventario*)malloc(sizeof(Inventario));
+    if(inventario == NULL){
+        logError("Erro na alocação de memoria para o inventario");
+        exit(1);
+    }
     inventario->itens = criaListaItens();
     return inventario;
 }

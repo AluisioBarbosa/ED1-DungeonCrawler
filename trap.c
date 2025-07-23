@@ -29,7 +29,7 @@ struct listaTrap{
 Trap* criaTrap(){
     Trap* armadilha = (Trap*)malloc(sizeof(Trap));
     if(armadilha == NULL){
-        logError("na alocação de memoria para criar uma armadilha");
+        logError("Erro na alocação de memoria para criar uma armadilha");
         exit(1);
     }
     armadilha->dano = 15;
@@ -83,6 +83,10 @@ int getTrapDamage(Trap* armadilha){
 
 ListaTrap* criaListaTrap(){
     ListaTrap* l = (ListaTrap*)malloc(sizeof(ListaTrap));
+    if(l == NULL){
+        logError("Falha na alocação de memoria para a lista de traps");
+        exit(1);
+    }
     l->inicio = NULL;
     l->fim = NULL;
     l->tamanho = 0;
@@ -166,7 +170,8 @@ bool removerTrap(ListaTrap* lista, Trap* alvo){
 
 
 Trap* buscarTrapXY(ListaTrap* lista, int x, int y){
-    if(lista == NULL){ 
+    if(lista == NULL){
+        logError("Lista de traps não existe"); 
         return NULL;
     }
 
@@ -182,6 +187,7 @@ Trap* buscarTrapXY(ListaTrap* lista, int x, int y){
 
 void atualizarTrapsNoMapa(ListaTrap* lista, char mapa[15][15], bool debug){
     if(debug == false || lista == NULL) {
+        logError("Lista de traps não existe // debug já esta setado false");
         return;
     }
 
@@ -204,6 +210,7 @@ void atualizarTrapsNoMapa(ListaTrap* lista, char mapa[15][15], bool debug){
 }
 void esconderTrapsDoMapa(ListaTrap* lista, char mapa[15][15]){
     if(lista == NULL) {
+        logError("Lista de traps não existe");
         return;
     }
 
@@ -227,6 +234,7 @@ void esconderTrapsDoMapa(ListaTrap* lista, char mapa[15][15]){
 // se sobrar tempo, colocar isso no game.c em vez de deixar no inimigo.c
 bool checarTrapXY(ListaTrap* lista, int x, int y){
     if(lista == NULL){
+        logError("Lista de traps não existe");
         return NULL;
     }
 

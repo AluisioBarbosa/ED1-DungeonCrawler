@@ -35,7 +35,7 @@ Item* criaItem(){
     int preSet = gerarNumeroAleatorio(1,3);
     Item* item = (Item*)malloc(sizeof(Item));
     if(item == NULL){
-        logError("Falha na alocação de memoria na criação do item");
+        logError("Erro na alocação de memoria na criação do item");
         exit(1);
     }
 
@@ -118,6 +118,10 @@ void usarBombaFumaca(Item* bombaF, void* afetado){
 
 ListaItem* criaListaItens(){
     ListaItem* l = (ListaItem*)malloc(sizeof(ListaItem));
+    if (l == NULL){
+        logError("Erro na alocação de memoria da lista de itens");
+        exit(1);
+    }
     l->inicio = NULL;
     l->fim = NULL;
     l->tamanho = 0;
@@ -126,6 +130,10 @@ ListaItem* criaListaItens(){
 
 void inserirItem(ListaItem* ListaItem, Item* item){
     CelulaItem *nova = malloc(sizeof(CelulaItem));
+    if(nova == NULL){
+        logError("Erro na alocação de memoria da celula da lista de itens");
+        exit(1);
+    }
     nova->item = item;
 
     if (ListaItem->inicio == NULL){ // lista vazia
@@ -197,7 +205,8 @@ bool removerItem(ListaItem* lista, Item* alvo){
 
 
 Item* buscarItemXY(ListaItem* lista, int x, int y){
-    if(lista == NULL){ 
+    if(lista == NULL){
+        logError("Lista de itens não existe"); 
         return NULL;
     }
 
@@ -213,6 +222,7 @@ Item* buscarItemXY(ListaItem* lista, int x, int y){
 
 void atualizarItemsNoMapa(ListaItem* lista, char mapa[15][15], bool debug){
     if(debug == false || lista == NULL) {
+        logError("Lista de itens não existe // Debug já é falso");
         return;
     }
 
@@ -232,6 +242,7 @@ void atualizarItemsNoMapa(ListaItem* lista, char mapa[15][15], bool debug){
 }
 void esconderItemsDoMapa(ListaItem* lista, char mapa[15][15]){
     if(lista == NULL) {
+        logError("Lista de itens não existe");
         return;
     }
 
@@ -252,6 +263,7 @@ void esconderItemsDoMapa(ListaItem* lista, char mapa[15][15]){
 // se sobrar tempo, colocar isso no game.c em vez de deixar no inimigo.c
 bool checarItemXY(ListaItem* lista, int x, int y){
     if(lista == NULL){
+        logError("Lista de itens não existe");
         return NULL;
     }
 
@@ -267,6 +279,7 @@ bool checarItemXY(ListaItem* lista, int x, int y){
 
 Item* copiarItem(Item* original) {
     if (original == NULL){
+        logError("Item não existe");
         return NULL;
     }
 
