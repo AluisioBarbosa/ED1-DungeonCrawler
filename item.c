@@ -130,24 +130,23 @@ ListaItem* criaListaItens(){
 
 void inserirItem(ListaItem* ListaItem, Item* item){
     CelulaItem *nova = malloc(sizeof(CelulaItem));
-    if(nova == NULL){
+    if (nova == NULL) {
         logError("Erro na alocação de memoria da celula da lista de itens");
         exit(1);
     }
     nova->item = item;
+    nova->prox = NULL; // pois será o novo fim
 
-    if (ListaItem->inicio == NULL){ // lista vazia
+    if (ListaItem->fim == NULL) { // lista vazia
         ListaItem->inicio = nova;
         ListaItem->fim = nova;
-        nova->prox = NULL;
         nova->ant = NULL;
+    } else {
+        nova->ant = ListaItem->fim;
+        ListaItem->fim->prox = nova;
+        ListaItem->fim = nova;
     }
-    else{
-        nova->prox = ListaItem->inicio;
-        nova->ant = NULL;
-        ListaItem->inicio->ant = nova;
-        ListaItem->inicio = nova;
-    }
+
     ListaItem->tamanho++;
 }
 
@@ -300,4 +299,30 @@ Item* copiarItem(Item* original) {
     novo->usar = original->usar;
 
     return novo;
+}
+
+Item* buscarItemPorIndice(ListaItem* lista, int indice) {
+    if (lista == NULL) {
+        logError("Lista de itens não existe");
+        return NULL;
+    }
+
+    if (indice < 0 || indice >= lista->tamanho) {
+        logError("Índice fora dos limites da lista de itens");
+        return NULL;
+    }
+
+    CelulaItem* atual = lista->inicio;
+    int contador = 0;
+
+    while (atual != NULL && contador < indice) {
+        atual = atual->prox;
+        contador++;
+    }
+
+    if (atual != NULL) {
+        return atual->item;
+    } else {
+        return NULL;
+    }
 }

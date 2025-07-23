@@ -73,14 +73,22 @@ void destruirInimigo(Inimigo* inimigo){
     if(inimigo == NULL){ // Não tem nada a destruir pq ja ta setado nulo
         return;
     }
-    if(inimigo->nome != NULL){
-        free(inimigo->nome);
-    }
     free(inimigo);
 }
 
 bool isEnemyDead(Inimigo* inimigo){
     return inimigo->isDead;
+}
+
+void healEnemy(Inimigo* inimigo, int cura){
+    inimigo->HP += cura;
+    if(inimigo->HP > inimigo->maxHP){
+        inimigo->HP = inimigo->maxHP;
+    }
+}
+
+void addEnemyArmor(Inimigo* inimigo, int armadura){
+    inimigo->armor += armadura;
 }
 // ----------------------------------------------- Gets e Setters -----------------------------------------------------------//
 

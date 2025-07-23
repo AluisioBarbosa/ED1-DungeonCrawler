@@ -59,18 +59,23 @@ void update(Jogo* jogo){
     else if(checarExisteTrapPosicaoMapa(jogo->dungeon) == true){
         Trap* armadilha = buscarTrapXY(getListaTrap(jogo->dungeon), getPlayerX(p1), getPlayerY(p1));
         setPlayerHpDamage(p1, getTrapDamage(armadilha));
+        logInfo("Voce pisou numa armadilha!!");
         removerTrap(getListaTrap(jogo->dungeon), armadilha);
         armadilha = NULL;
+        Sleep(1000);
+        printDungeon(jogo->dungeon);
     }
     else if(checarExisteItemPosicaoMapa(jogo->dungeon) == true){
         Item* item = buscarItemXY(getListaItem(jogo->dungeon), getPlayerX(p1), getPlayerY(p1));
         adicionarNoInventario(getInventario(p1), copiarItem(item));
+        system("cls");
         char mensagem[64];
         snprintf(mensagem, sizeof(mensagem), "Voce pegou um item: %s", getItemNome(item));
         logInfo(mensagem);
         removerItem(getListaItem(jogo->dungeon), item);
         item = NULL;
         Sleep(1000);
+        printDungeon(jogo->dungeon);
     }
 
     if(getPlayerX(getPlayer(jogo->dungeon)) == 14 && getPlayerY(getPlayer(jogo->dungeon)) == 13){ // termina o jogo se chegar na saida

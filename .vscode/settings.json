@@ -9,6 +9,7 @@
         "stdlib.h": "c",
         "cores.h": "c",
         "mapa.h": "c",
-        "windows.h": "c"
+        "windows.h": "c",
+        "inimigo.h": "c"
     }
 }

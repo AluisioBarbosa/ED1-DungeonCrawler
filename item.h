@@ -33,3 +33,4 @@ Item* buscarItemXY(ListaItem*, int , int);
 bool removerItem(ListaItem*, Item*);
 bool checarItemXY(ListaItem*, int, int);
 Item* copiarItem(Item*);
+Item* buscarItemPorIndice(ListaItem*, int );

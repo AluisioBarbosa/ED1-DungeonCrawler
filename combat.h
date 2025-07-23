@@ -5,3 +5,4 @@
 bool combate(Inimigo* , Player*);
 void exibirHUD(Inimigo*, Player*);
 void trocaTurno(bool*);
+void turnoInimigo(Inimigo*, Player*, bool*);

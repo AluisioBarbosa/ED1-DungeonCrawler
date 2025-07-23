@@ -7,6 +7,8 @@ typedef struct listaInimigo ListaInimigo;
 Inimigo*            criarInimigo                    ();                //Função que cria o inimigo com base em pre-sets (HP, dano, armor, etc)
 void                destruirInimigo                 (Inimigo*);        //Função para destruir o inimigo quando ele morrer
 bool                isEnemyDead                     (Inimigo*);        //Função que checa se o inimigo esta morto
+void                healEnemy                       (Inimigo*, int);
+void                addEnemyArmor                   (Inimigo*, int);
 
 // ------------------------------------- Gets e setters ---------------------------------------------------------------//
 
