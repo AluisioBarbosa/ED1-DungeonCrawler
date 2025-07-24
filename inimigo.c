@@ -45,22 +45,22 @@ Inimigo* criarInimigo(){
             inimigo->representacaoMapa = 'Z';
             strcpy(inimigo->nome, "Zumbi");
             inimigo->HP = 70;
-            inimigo->weaponDamage = 7;
+            inimigo->weaponDamage = 15;
             inimigo->armor = 5;
             break;
         case 2:
             inimigo->representacaoMapa = 'E';
             strcpy(inimigo->nome, "Esqueleto");
             inimigo->HP = 50;
-            inimigo->weaponDamage = 10;
+            inimigo->weaponDamage = 14;
             inimigo->armor = 9;
             break;
         case 3:
             inimigo->representacaoMapa = 'H';
             strcpy(inimigo->nome, "Humano");
             inimigo->HP = 90;
-            inimigo->weaponDamage = 5;
-            inimigo->armor = 15;
+            inimigo->weaponDamage = 11;
+            inimigo->armor = 8;
             break;      
     }
     inimigo->inimigoID = preSet;

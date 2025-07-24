@@ -19,6 +19,7 @@ int                 getTrapY                (Trap*);
 bool                getTrapState            (Trap*);
 char                getTrapRepresentacao    (Trap*);
 int                 getTrapDamage           (Trap*);
+int getTrapQuantidade(ListaTrap*);
 
 
 

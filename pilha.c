@@ -57,7 +57,6 @@ char pop(Pilha* pilha) {
 
 void imprimePilha(Pilha* pilha){
     Celula* nova = pilha->topo;
-
     while(nova != NULL){
         printf("%d \n", nova->valor);
         nova = nova->proximo;
@@ -75,4 +74,15 @@ bool isEmpty(Pilha* pilha){
     }
     
     return false;
+}
+
+void destruirPilha(Pilha* pilha) {
+    if (pilha == NULL){
+         return;
+    }
+    while (isEmpty(pilha) == false) {
+        pop(pilha);
+    }
+
+    free(pilha);
 }

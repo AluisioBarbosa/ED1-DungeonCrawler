@@ -77,6 +77,9 @@ char getTrapRepresentacao(Trap* armadilha){
 int getTrapDamage(Trap* armadilha){
     return armadilha->dano;
 }
+int getTrapQuantidade(ListaTrap* lista){
+    return lista->tamanho;
+}
 
 // ---------------------------------- Funcoes para lista de traps ------------------------------------------------------------//
 

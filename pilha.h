@@ -7,3 +7,4 @@ char        pop                 (Pilha*);
 void        imprimePilha        (Pilha*);
 int         pilhaSize           (Pilha*);
 bool        isEmpty             (Pilha*);
+void destruirPilha(Pilha*);

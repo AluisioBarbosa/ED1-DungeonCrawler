@@ -11,6 +11,7 @@
 #include "movimentacao.h"
 #include "inventario.h"
 #include "pilha.h"
+#include "fila.h"
 
 typedef enum{
     WORLD_MAP = 1,
@@ -24,6 +25,7 @@ struct jogo{
     Mapa* dungeon;
     bool fimDeJogo;
     Pilha* movimentos;
+    Fila* logDeBatalha;
 };
 
 Jogo* criarJogo(){
@@ -35,6 +37,7 @@ Jogo* criarJogo(){
     jogo->fimDeJogo = false;
     jogo->dungeon = criaMapa();
     jogo->movimentos = criaPilha();
+    jogo->logDeBatalha = criarFila();
     GAME_STATE = WORLD_MAP; // tem que setar o game state para o mapa da dungeon no inicio
     printDungeon(jogo->dungeon);
     return jogo;
@@ -52,6 +55,8 @@ void update(Jogo* jogo){
         }
         setarInimigosDebug(jogo->dungeon, getDebugState(jogo->dungeon));
     }
+    
+
     if(checarExisteInimigoPosicaoMapa(jogo->dungeon) == true){
         Inimigo* inimigo = buscarInimigoXY(getListaInimigos(jogo->dungeon), getPlayerX(p1), getPlayerY(p1));
         GAME_STATE = COMBAT;
@@ -77,6 +82,10 @@ void update(Jogo* jogo){
         Sleep(1000);
         printDungeon(jogo->dungeon);
     }
+    else if(GetAsyncKeyState('I') & 0x8000){
+        GAME_STATE = INVENTORY;
+        Sleep(1000);
+    }
 
     if(getPlayerX(getPlayer(jogo->dungeon)) == 14 && getPlayerY(getPlayer(jogo->dungeon)) == 13){ // termina o jogo se chegar na saida
         system("cls");
@@ -95,7 +104,7 @@ void update(Jogo* jogo){
     }
     else if(GAME_STATE == COMBAT){
         Inimigo* inimigo = buscarInimigoXY(getListaInimigos(jogo->dungeon), getPlayerX(p1), getPlayerY(p1));
-        if(combate(inimigo, p1) == true){
+        if(combate(inimigo, p1, GAME_STATE, jogo->logDeBatalha) == true){
             removerInimigo(getListaInimigos(jogo->dungeon), inimigo);
             inimigo = NULL;
             GAME_STATE = WORLD_MAP;
@@ -103,7 +112,14 @@ void update(Jogo* jogo){
         }
     }
     else if(GAME_STATE == INVENTORY){
-        
+        Item* item = inventarioLoop(getInventario(p1), GAME_STATE);
+        if(item != NULL){
+            usarItem(item, p1);
+            removerItem(getInventarioLista(getInventario(p1)), item);
+        }
+        GAME_STATE = WORLD_MAP;
+        printDungeon(jogo->dungeon);
+        item = NULL;
     }
 
     
@@ -116,6 +132,8 @@ bool getEndGame(Jogo* jogo){
 
 void destruirJogo(Jogo* jogo){
     destruirMapa(jogo->dungeon);
+    destruirPilha(jogo->movimentos);
+    destruirFila(jogo->logDeBatalha);
     free(jogo);
 }
 

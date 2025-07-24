@@ -36,14 +36,14 @@ Player* criarPlayer(){
         case 1:
             strcpy(player->nome, "Seu Carlinhos");
             player->HP = 110;
-            player->weaponDamage = 15;
+            player->weaponDamage = 18;
             player->armor = 11;
             break;
         case 2:
             strcpy(player->nome, "Jorge");
             player->HP = 80;
             player->weaponDamage = 25;
-            player->armor = 21;
+            player->armor = 16;
             break;
         case 3:
             strcpy(player->nome, "Tiao");
@@ -55,12 +55,12 @@ Player* criarPlayer(){
             strcpy(player->nome, "Tim Maia");
             player->HP = 100;
             player->weaponDamage = 20;
-            player->armor = 15;
+            player->armor = 12;
             break;
         case 5:
             strcpy(player->nome, "Jodisvaldo");
             player->HP = 120;
-            player->weaponDamage = 14;
+            player->weaponDamage = 17;
             player->armor = 10;
             break;
     }

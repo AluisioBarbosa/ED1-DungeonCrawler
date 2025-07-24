@@ -104,10 +104,15 @@ Mapa* criaMapa(){
             break;
         }
     }
+    dungeon->mapa[getPlayerY(dungeon->player)][getPlayerX(dungeon->player)] = getPlayerRepresentacao(dungeon->player);
+
     setarItens(dungeon);
     setarInimigos(dungeon);
     setarTraps(dungeon);
-    dungeon->mapa[getPlayerY(dungeon->player)][getPlayerX(dungeon->player)] = getPlayerRepresentacao(dungeon->player);
+    esconderInimigosDoMapa(dungeon->Inimigos, dungeon->mapa);
+    esconderItemsDoMapa(dungeon->itens, dungeon->mapa);
+    esconderTrapsDoMapa(dungeon->traps, dungeon->mapa);
+
     logInfo("Dungeon criada com sucesso.");
     Sleep(450);
     return dungeon;
@@ -116,6 +121,8 @@ Mapa* criaMapa(){
 
 void printDungeon(Mapa* dungeon){
     system("cls");
+    printf(TEXTO_VERDE_CLARO"HEROI: "RESET"" "%s\n", getPlayerName(dungeon->player));
+    printf(TEXTO_VERMELHO_CLARO"HP: "RESET"" "%d/%d\n", getPlayerHP(dungeon->player), getPlayerMaxHP(dungeon->player));
     if(dungeon->debug == false){
         for(int i = 0; i < 15; i++){
             for(int j = 0; j < 15; j++){
@@ -167,11 +174,19 @@ void printDungeon(Mapa* dungeon){
             printf("\n");
         }
     }
-    printf("VIDA DO JOGADOR: %d     QUANTIDADE DE ITENS NA DUNGEON: %d", getPlayerHP(dungeon->player), getQuantidadeItem(dungeon->itens));
+    printf(TEXTO_AMARELO"Comandos:\n"RESET"");
+    printf(TEXTO_AMARELO"[A][W][S][D] "RESET"" "para andar\n");
+    printf(TEXTO_AMARELO"[I] "RESET"" " para abrir o inventario\n");
+
+    if(dungeon->debug == true){
+        printf("QUANTIDADE DE INIMIGOS: %d\n", getInimigoQuantidade(dungeon->Inimigos));
+        printf("QUANTIDADE DE TRAPS: %d\n", getTrapQuantidade(dungeon->traps));
+        printf("QUANTIDADE DE ITENS: %d\n", getQuantidadeItem(dungeon->itens));
+    }
 }
 
 void setarInimigos(Mapa* dungeon){
-    int quantidade = gerarNumeroAleatorio(4, 8);
+    int quantidade = gerarNumeroAleatorio(5, 8);
     for(int i = 0; i < quantidade; i++){
         int setado = 0;
         while(setado == 0){
@@ -181,7 +196,7 @@ void setarInimigos(Mapa* dungeon){
                 Inimigo* inimigo = criarInimigo();
                 setEnemyX(inimigo, k);
                 setEnemyY(inimigo, j);
-                // dungeon->mapa[j][k] = getInimigoRepresentacao(inimigo); // só tire o comentario caso queira debugar diretamente
+                dungeon->mapa[j][k] = getInimigoRepresentacao(inimigo);
                 inserirInimigo(dungeon->Inimigos, inimigo);
                 setado = 1;
             }
@@ -198,7 +213,7 @@ void setarTraps(Mapa* dungeon){
             int k = gerarNumeroAleatorio(0,14);
             if(dungeon->mapa[j][k] == ' '){
                 Trap* armadilha = criaTrap();
-                // dungeon->mapa[j][k] = getTrapRepresentacao(armadilha); // só tire o comentario caso queira debugar diretamente
+                dungeon->mapa[j][k] = getTrapRepresentacao(armadilha);
                 setTrapX(armadilha, k);
                 setTrapY(armadilha, j);
                 inserirTrap(dungeon->traps, armadilha);
@@ -209,7 +224,7 @@ void setarTraps(Mapa* dungeon){
 }
 
 void setarItens(Mapa* dungeon){
-    int quantidade = gerarNumeroAleatorio(3,5);
+    int quantidade = gerarNumeroAleatorio(4,9);
     for(int i = 0; i < quantidade; i++){
         int setado = 0;
         while(setado == 0){
@@ -217,7 +232,7 @@ void setarItens(Mapa* dungeon){
             int k = gerarNumeroAleatorio(0, 14);
             if(dungeon->mapa[j][k] == ' '){
                 Item* item = criaItem();
-                // dungeon->mapa[j][k] = getItemRepresentacao(item); // só tire o comentario caso queira debugar diretamente
+                dungeon->mapa[j][k] = getItemRepresentacao(item);
                 setItemX(item, k);
                 setItemY(item, j);
                 inserirItem(dungeon->itens, item);
