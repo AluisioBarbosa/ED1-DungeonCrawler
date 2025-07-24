@@ -31,16 +31,15 @@ void turnoInimigo(Inimigo* inimigo, Player* player, bool* turno, Fila* logDeBata
         // se o inimigo tiver <= 20 de vida, ele tenta se curar, tem 15% de curar 18 de vida
         if(gerarNumeroAleatorio(1,100) <= 15){
             healEnemy(inimigo, 18); // Como todo turno ele pode se curar, tem que balancear esse numero de cura
-            exibirHUD(inimigo, player, logDeBatalha);
             enfileirar(logDeBatalha, "O inimigo se curou em 18 pontos de HP");
-            imprimirFila(logDeBatalha);
+            exibirHUD(inimigo, player, logDeBatalha);
             Sleep(2000);
             trocaTurno(turno);
         }
         else{
             // aqui ele tenta se curar mas nao consegue
             enfileirar(logDeBatalha, "O inimigo tentou se curar, porem nao achou a pocao em sua bolsa a tempo...");
-            imprimirFila(logDeBatalha);
+            exibirHUD(inimigo, player, logDeBatalha);
             Sleep(2000);
             trocaTurno(turno);
         }
@@ -49,9 +48,8 @@ void turnoInimigo(Inimigo* inimigo, Player* player, bool* turno, Fila* logDeBata
         if(getEnemyHP(inimigo) > 40){
             // se tiver mais de 40 de vida, ele bate no jogador
             setPlayerHpDamage(player, getEnemyWeaponDamage(inimigo));
-            exibirHUD(inimigo, player, logDeBatalha);
             enfileirar(logDeBatalha, "O inimigo ataca o heroi!");
-            imprimirFila(logDeBatalha);
+            exibirHUD(inimigo, player, logDeBatalha);
             Sleep(2000);
             trocaTurno(turno);
         }
@@ -59,9 +57,8 @@ void turnoInimigo(Inimigo* inimigo, Player* player, bool* turno, Fila* logDeBata
             // se tiver algo entre 16 e 40 de vida, ele aumenta sua propria armadura e bate fraco no jogador
             addEnemyArmor(inimigo, 3);
             setPlayerHpDamage(player, 8);
-            exibirHUD(inimigo, player, logDeBatalha);
             enfileirar(logDeBatalha ,"O inimigo aumenta sua propria armadura e acerta fracamente o heroi");
-            imprimirFila(logDeBatalha);
+            exibirHUD(inimigo, player, logDeBatalha);
             Sleep(2000);
             trocaTurno(turno);
         }
@@ -87,11 +84,10 @@ bool combate(Inimigo* inimigo, Player* player, int GAME_STATE, Fila* logDeBatalh
             while(acao == false){
                 if (GetAsyncKeyState('J') & 0x8000){
                     setEnemyHpDamage(inimigo, getPlayerWeaponDamage(player)); 
+                    enfileirar(logDeBatalha, "Voce bateu no inimigo!");
                     acao = true;
                     trocaTurno(&turno);
                     exibirHUD(inimigo, player, logDeBatalha);
-                    enfileirar(logDeBatalha, "Voce bateu no inimigo!");
-                    imprimirFila(logDeBatalha);
                     Sleep(1500);
                 }
                 else if (GetAsyncKeyState('I') & 0x8000){
@@ -105,13 +101,13 @@ bool combate(Inimigo* inimigo, Player* player, int GAME_STATE, Fila* logDeBatalh
                             case 1: // pocao de vida
                                 usarItem(item, player);
                                 enfileirar(logDeBatalha, "Voce usa uma pocao de cura");
-                                imprimirFila(logDeBatalha);
+                                exibirHUD(inimigo, player, logDeBatalha);
                                 Sleep(500);
                                 break;
                             case 2:// bomba
                                 usarItem(item, inimigo);
                                 enfileirar(logDeBatalha, "Voce usa a bomba para explodir um inimigo!");
-                                imprimirFila(logDeBatalha);
+                                exibirHUD(inimigo, player, logDeBatalha);
                                 Sleep(500);
                                 break;
                             case 3:// bomba de fumaça
