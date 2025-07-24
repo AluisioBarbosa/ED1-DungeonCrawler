@@ -11,7 +11,7 @@
 #include "item.h"
 #include "inventario.h"
 
-void exibirHUD(Inimigo* inimigo, Player* player){
+void exibirHUD(Inimigo* inimigo, Player* player, Fila* logDeBatalha){
     system("cls");
     printf(TEXTO_VERDE"Heroi: "RESET ""  "%s\n", getPlayerName(player));
     printf(TEXTO_VERMELHO"HP: " RESET"" "%d/%d\n", getPlayerHP(player), getPlayerMaxHP(player));
@@ -22,6 +22,7 @@ void exibirHUD(Inimigo* inimigo, Player* player){
     printf(TEXTO_AMARELO_CLARO"Acoes: \n"RESET"");
     printf(TEXTO_AMARELO"[J] " RESET"" "Atacar\n");
     printf(TEXTO_AMARELO"[I] " RESET"" "Abrir inventario\n");
+    imprimirFila(logDeBatalha);
 }
 
 void turnoInimigo(Inimigo* inimigo, Player* player, bool* turno, Fila* logDeBatalha){
@@ -30,7 +31,7 @@ void turnoInimigo(Inimigo* inimigo, Player* player, bool* turno, Fila* logDeBata
         // se o inimigo tiver <= 20 de vida, ele tenta se curar, tem 15% de curar 18 de vida
         if(gerarNumeroAleatorio(1,100) <= 15){
             healEnemy(inimigo, 18); // Como todo turno ele pode se curar, tem que balancear esse numero de cura
-            exibirHUD(inimigo, player);
+            exibirHUD(inimigo, player, logDeBatalha);
             enfileirar(logDeBatalha, "O inimigo se curou em 18 pontos de HP");
             imprimirFila(logDeBatalha);
             Sleep(2000);
@@ -48,7 +49,7 @@ void turnoInimigo(Inimigo* inimigo, Player* player, bool* turno, Fila* logDeBata
         if(getEnemyHP(inimigo) > 40){
             // se tiver mais de 40 de vida, ele bate no jogador
             setPlayerHpDamage(player, getEnemyWeaponDamage(inimigo));
-            exibirHUD(inimigo, player);
+            exibirHUD(inimigo, player, logDeBatalha);
             enfileirar(logDeBatalha, "O inimigo ataca o heroi!");
             imprimirFila(logDeBatalha);
             Sleep(2000);
@@ -58,7 +59,7 @@ void turnoInimigo(Inimigo* inimigo, Player* player, bool* turno, Fila* logDeBata
             // se tiver algo entre 16 e 40 de vida, ele aumenta sua propria armadura e bate fraco no jogador
             addEnemyArmor(inimigo, 3);
             setPlayerHpDamage(player, 8);
-            exibirHUD(inimigo, player);
+            exibirHUD(inimigo, player, logDeBatalha);
             enfileirar(logDeBatalha ,"O inimigo aumenta sua propria armadura e acerta fracamente o heroi");
             imprimirFila(logDeBatalha);
             Sleep(2000);
@@ -77,7 +78,7 @@ bool combate(Inimigo* inimigo, Player* player, int GAME_STATE, Fila* logDeBatalh
     bool turno = false;
     while(isEnemyDead(inimigo) == false && getPlayerHP(player) > 0){
         bool acao = false;
-        exibirHUD(inimigo, player);
+        exibirHUD(inimigo, player, logDeBatalha);
 
         if(turno == true){
             turnoInimigo(inimigo, player, &turno, logDeBatalha);
@@ -88,12 +89,15 @@ bool combate(Inimigo* inimigo, Player* player, int GAME_STATE, Fila* logDeBatalh
                     setEnemyHpDamage(inimigo, getPlayerWeaponDamage(player)); 
                     acao = true;
                     trocaTurno(&turno);
-                    exibirHUD(inimigo, player);
+                    exibirHUD(inimigo, player, logDeBatalha);
                     enfileirar(logDeBatalha, "Voce bateu no inimigo!");
                     imprimirFila(logDeBatalha);
                     Sleep(1500);
                 }
                 else if (GetAsyncKeyState('I') & 0x8000){
+                    while(GetAsyncKeyState('I') & 0x8000) {
+                        Sleep(10);  // Enquanto nao soltar a tecla, ele nao avança
+                    }
                     Item* item = inventarioLoop(getInventario(player), GAME_STATE);
                     if(item != NULL){
                         int ID = getItemID(item);
@@ -123,7 +127,7 @@ bool combate(Inimigo* inimigo, Player* player, int GAME_STATE, Fila* logDeBatalh
                         
                     }
                     if(bombaDeFumaca == false){
-                        exibirHUD(inimigo, player);
+                        exibirHUD(inimigo, player, logDeBatalha);
                     }
                     Sleep(300);
                 }
@@ -140,7 +144,7 @@ bool combate(Inimigo* inimigo, Player* player, int GAME_STATE, Fila* logDeBatalh
             return true;
         }
         else{
-            exibirHUD(inimigo, player);
+            exibirHUD(inimigo, player, logDeBatalha);
             logInfo("Voce derrotou o inimigo!!!!!");
             esvaziarFila(logDeBatalha);
             Sleep(2000);

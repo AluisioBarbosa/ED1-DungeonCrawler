@@ -45,19 +45,19 @@ Item* criaItem(){
             strcpy(item->nome, "Pocao de vida");
             item->representacaoMapa = 'O';
             item->usar = usarPocao;
-            strcpy(item->descricao, "Pocao de vida: cura 50 de HP");
+            strcpy(item->descricao, "Pocao de vida: Uma pocao rarissima de origem elfica. Use para curar 40 de HP");
             break;
         case 2:
             strcpy(item->nome, "Bomba");
             item->representacaoMapa = 'O';
             item->usar = usarBomba;
-            strcpy(item->descricao, "Bomba: inflinge 40 de dano ao inimigo");
+            strcpy(item->descricao, "Bomba: Uma bomba antiga esquecida por mineradores anoes de outrora. Use para inflingir 40 de dano ao inimigo");
             break;
         case 3:
             strcpy(item->nome, "Bomba de fumaca"); // esse item aqui a gente usa pra escapar dos bixos
             item->representacaoMapa = 'O';
             item->usar = usarBombaFumaca; // placeholder
-            strcpy(item->descricao, "Bomba de fumaça: use este item para escapar do combate");
+            strcpy(item->descricao, "Bomba de fumaca: Os antigos ninjas usavam dispositivos como esse em suas batalhas. Use-a para escapar de uma batalha");
             break;      
     }
     item->itemID = preSet;

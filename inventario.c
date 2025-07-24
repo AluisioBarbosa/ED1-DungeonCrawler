@@ -115,6 +115,9 @@ Item* inventarioLoop(Inventario* inventario, int GAME_STATE){
             Sleep(200);
         }
         else if(GetAsyncKeyState('P') & 0x8000){
+            if(GAME_STATE == 2){ // se tiver no combate da pra usar todos os itens
+                return buscarItemPorIndice(inventario->itens, posicaoAtual);
+            }
             if(GAME_STATE == 3 && getItemID(buscarItemPorIndice(inventario->itens, posicaoAtual)) == 1){ // no mapa mundo só da pra usar a poçao
                 return buscarItemPorIndice(inventario->itens, posicaoAtual);
             }
@@ -122,9 +125,6 @@ Item* inventarioLoop(Inventario* inventario, int GAME_STATE){
                 logWarn("So e possivel utilizar a pocao fora de batalha!!!");
             }
 
-            if(GAME_STATE == 2){ // se tiver no combate da pra usar todos os itens
-                return buscarItemPorIndice(inventario->itens, posicaoAtual);
-            }
             Sleep(200);
         }
         else if(GetAsyncKeyState('I') & 0x8000){

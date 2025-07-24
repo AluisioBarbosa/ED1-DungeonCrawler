@@ -4,6 +4,6 @@
 #include "fila.h"
 
 bool combate(Inimigo* , Player*, int, Fila*);
-void exibirHUD(Inimigo*, Player*);
+void exibirHUD(Inimigo*, Player*, Fila*);
 void trocaTurno(bool*);
 void turnoInimigo(Inimigo*, Player*, bool*, Fila*);

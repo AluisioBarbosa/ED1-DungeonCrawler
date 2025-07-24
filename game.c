@@ -83,8 +83,11 @@ void update(Jogo* jogo){
         printDungeon(jogo->dungeon);
     }
     else if(GetAsyncKeyState('I') & 0x8000){
+        while(GetAsyncKeyState('I') & 0x8000) {
+            Sleep(10); // enquanto nao soltar a tecla nao avança
+        }
+
         GAME_STATE = INVENTORY;
-        Sleep(1000);
     }
 
     if(getPlayerX(getPlayer(jogo->dungeon)) == 14 && getPlayerY(getPlayer(jogo->dungeon)) == 13){ // termina o jogo se chegar na saida
