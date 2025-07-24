@@ -20,19 +20,19 @@ int                 getEnemyY                       (Inimigo*);
 char                getInimigoRepresentacao         (Inimigo*);
 int                 getEnemyWeaponDamage            (Inimigo*);        //Função para pegar o dano da arma
 int                 getEnemyHP                      (Inimigo*);        //Função que pega o HP atual do inimigo
-char* getEnemyName(Inimigo*);
-int getEnemyMaxHP(Inimigo*);
+char*               getEnemyName                    (Inimigo*);
+int                 getEnemyMaxHP                   (Inimigo*);
 
 // ------------------------------------- Funções de lista ---------------------------------------------------------------//
 ListaInimigo*       criaListaInimigo                ();
 void                inserirInimigo                  (ListaInimigo*, Inimigo*);
 void                destruirListaInimigo            (ListaInimigo*);
-int getInimigoQuantidade(ListaInimigo*);
-bool removerInimigo(ListaInimigo*, Inimigo*);
-Inimigo* buscarInimigoXY(ListaInimigo*, int, int);
-bool checarInimigoXY(ListaInimigo*, int, int);
-void atualizarInimigosNoMapa(ListaInimigo*, char[15][15], bool);
-void esconderInimigosDoMapa(ListaInimigo*, char [15][15]);
+int                 getInimigoQuantidade            (ListaInimigo*);
+bool                removerInimigo                  (ListaInimigo*, Inimigo*);
+Inimigo*            buscarInimigoXY                 (ListaInimigo*, int, int);
+bool                checarInimigoXY                 (ListaInimigo*, int, int);
+void                atualizarInimigosNoMapa         (ListaInimigo*, char[15][15], bool);
+void                esconderInimigosDoMapa          (ListaInimigo*, char [15][15]);
 
 
 // ------------------------------------- Funções para debugar ---------------------------------------------------------------//

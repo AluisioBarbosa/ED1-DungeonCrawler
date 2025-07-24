@@ -2,4 +2,4 @@
 #include "pilha.h"
 
 
-void movimentarJogador(Mapa*, Pilha*);
+void            movimentarJogador           (Mapa*, Pilha*);

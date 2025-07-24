@@ -5,8 +5,9 @@ typedef struct listaItem ListaItem;         // linked list duplamente encadeada 
 typedef struct celulaItem CelulaItem;
 
 Item*               criaItem                        ();
-void                destruirItem                     (Item*);
-void imprimirArte(int);
+void                destruirItem                    (Item*);
+void                imprimirArte                    (int);
+Item*               copiarItem                      (Item*);
 
 //------------------------------------------- Gets e Setters ---------------------------------------------------------//
 
@@ -15,25 +16,23 @@ void                setItemY                        (Item*, int);
 int                 getItemX                        (Item*);
 int                 getItemY                        (Item*);
 char                getItemRepresentacao            (Item* item);
-char* getItemNome(Item*);
-int getQuantidadeItem(ListaItem*);
-int getItemID(Item*);
-char* getItemDescricao(Item*);
+char*               getItemNome                     (Item*);
+int                 getQuantidadeItem               (ListaItem*);
+int                 getItemID                       (Item*);
+char*               getItemDescricao                (Item*);
 
 //------------------------------------------- Funções usar do item (ponteiro) ---------------------------------------------------------//
 void                usarPocao                       (Item*, void*);
 void                usarBomba                       (Item*, void*);
 void                usarBombaFumaca                 (Item*, void*);
-void usarItem(Item*, void* );
+void                usarItem                        (Item*, void* );
 //------------------------------------------- Funções de lista ---------------------------------------------------------//
 ListaItem*          criaListaItens                  ();         
 void                destruirListaItem               (ListaItem*);
 void                inserirItem                     (ListaItem*, Item*);
-
-void esconderItemsDoMapa(ListaItem* , char [15][15]);
-void atualizarItemsNoMapa(ListaItem* , char [15][15], bool);
-Item* buscarItemXY(ListaItem*, int , int);
-bool removerItem(ListaItem*, Item*);
-bool checarItemXY(ListaItem*, int, int);
-Item* copiarItem(Item*);
-Item* buscarItemPorIndice(ListaItem*, int );
+void                esconderItemsDoMapa             (ListaItem* , char [15][15]);
+void                atualizarItemsNoMapa            (ListaItem* , char [15][15], bool);
+Item*               buscarItemXY                    (ListaItem*, int , int);
+bool                removerItem                     (ListaItem*, Item*);
+bool                checarItemXY                    (ListaItem*, int, int);
+Item*               buscarItemPorIndice             (ListaItem*, int );
