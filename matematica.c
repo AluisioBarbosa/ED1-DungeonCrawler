@@ -19,6 +19,8 @@ int gerarNumeroAleatorio(int minimo, int maximo){
 int calculaDano(int dano, int armadura){
     int danoRecebido;
     danoRecebido = dano - (int)round(armadura * 0.4); // O dano recebido sera o dano do inimigo menos o arredondamento da armadura do player * 0.4
-
+    if(danoRecebido < 0){
+        danoRecebido = 0;
+    }
     return danoRecebido;
 }

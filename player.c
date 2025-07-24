@@ -3,12 +3,16 @@
 #include "matematica.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include <stdlib.h>
+#include "log.h"
 
 struct player{
     char representacaoMapa;
+    char nome[32];
     int playerID;
     int HP;
+    int maxHP;
     int weaponDamage;
     int armor;
     Inventario* inventario;
@@ -21,7 +25,7 @@ struct player{
 Player* criarPlayer(){
     Player *player = (Player*)malloc(sizeof(Player));
     if(player == NULL){
-        printf("Erro na alocação de memoria para o jogador");
+        logError("Erro na alocação de memoria do personagem");
         exit(1);
     }
 
@@ -30,38 +34,43 @@ Player* criarPlayer(){
     switch(preSet){
 
         case 1:
+            strcpy(player->nome, "Seu Carlinhos");
             player->HP = 110;
-            player->weaponDamage = 15;
-            player->armor = 10;
+            player->weaponDamage = 18;
+            player->armor = 11;
             break;
         case 2:
+            strcpy(player->nome, "Jorge");
             player->HP = 80;
             player->weaponDamage = 25;
-            player->armor = 30;
+            player->armor = 16;
             break;
         case 3:
+            strcpy(player->nome, "Tiao");
             player->HP = 150;
-            player->weaponDamage = 10;
+            player->weaponDamage = 18;
             player->armor = 5;
             break;
         case 4:
+            strcpy(player->nome, "Tim Maia");
             player->HP = 100;
             player->weaponDamage = 20;
-            player->armor = 15;
+            player->armor = 12;
             break;
         case 5:
+            strcpy(player->nome, "Jodisvaldo");
             player->HP = 120;
-            player->weaponDamage = 10;
+            player->weaponDamage = 17;
             player->armor = 10;
             break;
     }
     player->playerID = preSet;
     player->inventario = criarInventario();
     player->isDead = false;
+    player->maxHP = player->HP;
     player->representacaoMapa = 'P';
     player->posicaoX = 1;
     player->posicaoY = 1;
-    
     return player;
 }
 
@@ -75,12 +84,13 @@ void destruirPlayer(Player* player){ // essa função só sera utilizada para a 
     }
 
     free(player);
+    logToFile("Player destruido com sucesso");
 }
 
 void healPlayer(Player* player, int cura){
     player->HP += cura;
-    if(player->HP > 150){
-        player->HP = 150;
+    if(player->HP > player->maxHP){
+        player->HP = player->maxHP;
     }
 }
 
@@ -118,6 +128,17 @@ char getPlayerRepresentacao(Player* player){
 }
 int getPlayerHP(Player* player){
     return player->HP;
+}
+int getPlayerMaxHP(Player* player){
+    return player->maxHP;
+}
+
+Inventario* getInventario(Player* player){
+    return player->inventario;
+}
+
+char* getPlayerName(Player* player){
+    return player->nome;
 }
 
 //------------------------------------------- Funções de debug ---------------------------------------------------------//
