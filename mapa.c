@@ -177,6 +177,7 @@ void printDungeon(Mapa* dungeon){
     printf(TEXTO_AMARELO"Comandos:\n"RESET"");
     printf(TEXTO_AMARELO"[A][W][S][D] "RESET"" "para andar\n");
     printf(TEXTO_AMARELO"[I] "RESET"" " para abrir o inventario\n");
+    printf(TEXTO_AMARELO"[Z] "RESET"" " para desfazer o movimento\n");
 
     if(dungeon->debug == true){
         printf("QUANTIDADE DE INIMIGOS: %d\n", getInimigoQuantidade(dungeon->Inimigos));
